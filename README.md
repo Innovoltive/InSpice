@@ -17,7 +17,7 @@ pip install inspice
 For development installation:
 
 ```bash
-git clone https://github.com/yourusername/InSpice.git
+git clone https://github.com/Innovoltive/InSpice.git
 cd InSpice
 pip install -e .
 ```
@@ -76,4 +76,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Acknowledgments
 
-Original project (InSpice) by Fabrice Salvaire.
+Original project (PySpice) by Fabrice Salvaire.
