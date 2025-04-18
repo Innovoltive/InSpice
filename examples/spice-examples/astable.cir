@@ -1,0 +1,33 @@
+.title Astable Multivibrator
+*
+****************************************************************************************************
+.subckt BasicComparator output voltage_minus non_inverting_input inverting_input
+E1 output voltage_minus TABLE {V(non_inverting_input, inverting_input)} = (-1uV, 0V) (1uV, 15V)
+* Error on line 0 : b.xcomparator.b*1 xcomparator.*1_int1 0 v= v(reference,comparator) ,   -1.0000000000e-06 ,   0.0000000000e+00 ,   1.0000000000e-06 ,   1.5000000000e+01
+*  unknown parameter (-1.0000000000e-06) 
+.ends
+****************************************************************************************************
+Vcc vcc 0 15 
+****************************************************************************************************
+* Time constant
+R1 output comparator 1k
+C1 comparator 0 100n 
+* mandatory
+.IC V(comparator)=0
+****************************************************************************************************
+* Reference
+R2 output reference 100k 
+R3 Vcc reference 100k 
+R4 reference 0 100k 
+****************************************************************************************************
+* Comparator
+* Xcomparator output 0 reference comparator BasicComparator 
+E1 output 0 TABLE {V(reference, comparator)} = (-1uV, 0V) (1uV, 15V)
+****************************************************************************************************
+.end
+****************************************************************************************************
+.control
+tran 1u 500u
+plot V(output) V(reference) V(comparator)
+.endc
+****************************************************************************************************
