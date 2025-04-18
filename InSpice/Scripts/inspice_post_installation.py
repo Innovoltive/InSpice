@@ -1,7 +1,11 @@
 ####################################################################################################
 #
 # InSpice - A Spice Package for Python
+# Copyright (C) 2025 Innovoltive
+# Modified by Innovoltive on April 18, 2025
 # Copyright (C) 2020 Fabrice Salvaire
+# Copyright (C) 2025 Innovoltive
+# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by

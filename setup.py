@@ -14,7 +14,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="InSpice",
     version=version,
-    description="Python interface to Ngspice and Xyce circuit simulators (forked from InSpice)",
+    description="Python interface to Ngspice and Xyce circuit simulators (forked from PySpice)",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Innovoltive",

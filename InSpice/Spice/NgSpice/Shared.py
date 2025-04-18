@@ -1,7 +1,9 @@
 ####################################################################################################
 #
 # InSpice - A Spice Package for Python
+# Copyright (C) 2014 Fabrice Salvaire
 # Copyright (C) 2025 Innovoltive
+# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as published by
@@ -104,7 +106,7 @@ from InSpice.Probe.WaveForm import (
 from InSpice.Tools.EnumFactory import EnumFactory
 # pylint: disable=no-name-in-module
 from InSpice.Unit import u_V, u_A, u_s, u_Hz, u_F, u_Degree
-# pylint: enable-no-name-in-module
+# pylint: enable=no-name-in-module
 
 from .SimulationType import SIMULATION_TYPE
 

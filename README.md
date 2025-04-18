@@ -1,6 +1,6 @@
 # InSpice
 
-This repository has been forked from it's original repository InSpice.
+This repository has been forked from it's original repository PySpice.
 
 ## About
 
@@ -76,4 +76,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Acknowledgments
 
-Original project (PySpice) by Fabrice Salvaire.
+Original project (PySpice) by Fabrice Salvaire
+# Copyright (C) 2025 Innovoltive
+# Modified by Innovoltive on April 18, 2025.
