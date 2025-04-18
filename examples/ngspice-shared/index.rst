@@ -7,6 +7,6 @@ implement an impedance model in Spice for input and output ports and implement t
 Python.  The NgSpice callbacks provide the interface to read and set current/voltage of the external
 nodes.
 
-See :mod:`PySpice.Spice.NgSpice.Shared` for more details.
+See :mod:`InSpice.Spice.NgSpice.Shared` for more details.
 
 .. end

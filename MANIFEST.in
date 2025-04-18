@@ -1,0 +1,14 @@
+include LICENSE.txt
+include README.md
+# Upload to TestPyPI first (recommended for testing)
+python -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+# When ready for production
+python -m twine upload dist/*include pyproject.toml
+recursive-include InSpice *.py *.h *.c *.rst *.yaml *.yml
+recursive-include examples *.py *.cir *.rst
+recursive-exclude * __pycache__
+recursive-exclude * *.py[cod]
+recursive-exclude * *~
+recursive-exclude * .git
+recursive-exclude * .DS_Store

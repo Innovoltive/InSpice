@@ -5,12 +5,12 @@
 #r#  Parse NgSpice Examples
 #r# ========================
 #r#
-#r# This example shows a to use the module :mod:`PySpice.Spice.NgSpice.ManualExamples`.
+#r# This example shows a to use the module :mod:`InSpice.Spice.NgSpice.ManualExamples`.
 #r#
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
@@ -18,8 +18,8 @@ logger = Logging.setup_logging()
 from pathlib import Path
 import os
 
-from PySpice.Spice.NgSpice import ManualExamples
-from PySpice.Spice.Parser import SpiceSource, SpiceFile
+from InSpice.Spice.NgSpice import ManualExamples
+from InSpice.Spice.Parser import SpiceSource, SpiceFile
 
 ####################################################################################################
 
@@ -73,7 +73,7 @@ def generator():
 # for line in spice_source.lines:
 #     print(line)
 
-# #r# Note: set env PySpiceLogLevel=debug
+# #r# Note: set env InSpiceLogLevel=debug
 # spice_source.parse()
 
 # #r# Dump the parsed lines

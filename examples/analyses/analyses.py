@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 #skip#
 
-# Program to test pole-zero, noise, and distortion function of ngspice, PySpice
+# Program to test pole-zero, noise, and distortion function of ngspice, InSpice
 
 import argparse
 
@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 
 ####################################################################################################
 
-from PySpice import Circuit, Simulator
+from InSpice import Circuit, Simulator
 
-# This program implements the PySpice equivalent of the following circuit,
+# This program implements the InSpice equivalent of the following circuit,
 # which is run using the shell command
 # $ ngspice -b file.ckt
 FILE_CKT = """
@@ -174,7 +174,7 @@ if __name__ == '__main__':
 
     logger = Logging.setup_logging()
 
-    parser = argparse.ArgumentParser("Test pyspice pole-zero, noise, distortion analysis")
+    parser = argparse.ArgumentParser("Test InSpice pole-zero, noise, distortion analysis")
     parser.add_argument('-dcir', action='store_true', dest='dump_circuit', help='dump_circuit.')
     parser.add_argument('-ac', action='store_true', dest='do_ac', help='Output AC analysis.')
     parser.add_argument('-dc', action='store_true', dest='do_dc', help='Output DC bias points.')

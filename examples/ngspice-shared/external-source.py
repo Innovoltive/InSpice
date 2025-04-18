@@ -18,7 +18,7 @@
 #
 # Traceback (most recent call last):
 #     analysis = simulation.transient(step_time=period/200, end_time=period*2)
-#   File "/usr/local/lib/python3.7/site-packages/PySpice/Spice/NgSpice/Shared.py", line 1145, in load_circuit
+#   File "/usr/local/lib/python3.7/site-packages/InSpice/Spice/NgSpice/Shared.py", line 1145, in load_circuit
 #     raise NgSpiceCircuitError('')
 
 ####################################################################################################
@@ -29,14 +29,14 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, Simulator, plot
-from PySpice.Spice.NgSpice.Shared import NgSpiceShared
-from PySpice.Unit import *
+from InSpice import Circuit, Simulator, plot
+from InSpice.Spice.NgSpice.Shared import NgSpiceShared
+from InSpice.Unit import *
 
 ####################################################################################################
 

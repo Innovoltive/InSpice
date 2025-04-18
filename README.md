@@ -1,6 +1,6 @@
 # InSpice
 
-This repository has been forked from it's original repository PySpice.
+This repository has been forked from it's original repository InSpice.
 
 ## About
 
@@ -57,7 +57,7 @@ For detailed documentation, please refer to the examples and docstrings.
 
 ## License
 
-InSpice is licensed under the GNU General Public License v3.0 (GPL-3.0), the same license as the original PySpice project.
+InSpice is licensed under the GNU General Public License v3.0 (GPL-3.0), the same license as the original InSpice project.
 
 ### GNU GPL v3.0
 
@@ -76,4 +76,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Acknowledgments
 
-Original project (PySpice) by Fabrice Salvaire.
+Original project (InSpice) by Fabrice Salvaire.

@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2017 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,13 +29,13 @@ from numpy import testing as np_test
 ####################################################################################################
 
 # Initialise logging
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Probe.WaveForm import *
-from PySpice.Unit import *
+from InSpice.Probe.WaveForm import *
+from InSpice.Unit import *
 
 ####################################################################################################
 
@@ -110,9 +110,9 @@ class TestUnits(unittest.TestCase):
         print_rule()
         # Fixme:
         #     waveform5 = waveform1 >= 5
-        #   File "PySpice/Probe/WaveForm.py", line 131, in __array_ufunc__
+        #   File "InSpice/Probe/WaveForm.py", line 131, in __array_ufunc__
         #     result = super().__array_ufunc__(ufunc, method, *inputs, **kwargs)
-        #   File "PySpice/Unit/Unit.py", line 1635, in __array_ufunc__
+        #   File "InSpice/Unit/Unit.py", line 1635, in __array_ufunc__
         #     raise ValueError
         ndarray5 = waveform1 >= 5@u_V
         np_test.assert_array_equal(ndarray5, np_raw_array1 >= 5)

@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,7 +24,7 @@ import unittest
 
 ####################################################################################################
 
-from PySpice.Spice.Parser.Parser import SpiceParser
+from InSpice.Spice.Parser.Parser import SpiceParser
 
 ####################################################################################################
 

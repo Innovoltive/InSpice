@@ -6,7 +6,7 @@ import pickle
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################

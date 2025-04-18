@@ -3,7 +3,7 @@
 
 ####################################################################################################
 
-# Program to test pole-zero function of ngspice, PySpice
+# Program to test pole-zero function of ngspice, InSpice
 
 import argparse
 
@@ -15,11 +15,11 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 
 ####################################################################################################
 
-from PySpice import Circuit, Simulator
+from InSpice import Circuit, Simulator
 
 class NodeNames:
     """Allow setting of nodes with appropriate names."""
@@ -53,7 +53,7 @@ def test_simple():
 
 if __name__ == '__main__':
     logger = Logging.setup_logging()
-    parser = argparse.ArgumentParser("Test pyspice pole-zero function")
+    parser = argparse.ArgumentParser("Test InSpice pole-zero function")
     parser.add_argument('-ts', action='store_true', dest='t_simple', help='Test simple rlc network.')
     args=parser.parse_args()
     if args.t_simple: test_simple()

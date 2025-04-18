@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,11 +24,11 @@ import unittest
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
-from PySpice.Spice.Netlist import *
-from PySpice.Unit import *
+from InSpice.Spice.Netlist import *
+from InSpice.Unit import *
 
 ####################################################################################################
 

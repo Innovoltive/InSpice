@@ -8,15 +8,15 @@
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 from pprint import pprint
 
 ####################################################################################################
 
-from PySpice import Circuit, SubCircuitFactory
-from PySpice.Unit import *
+from InSpice import Circuit, SubCircuitFactory
+from InSpice.Unit import *
 
 circuit = Circuit('Test')
 
@@ -27,9 +27,9 @@ C1 = circuit.C(1, 1, circuit.gnd, 2@u_uF)
 print(C1.plus)
 # Pin plus of C1 on node 3
 print(type(C1.plus))
-# <class 'PySpice.Spice.Netlist.Pin'>
+# <class 'InSpice.Spice.Netlist.Pin'>
 print(type(C1.plus.node))
-# <class 'PySpice.Spice.Netlist.Node'>
+# <class 'InSpice.Spice.Netlist.Node'>
 print(C1.pins)
 # [Pin plus of C1 on node 3, Pin minus of C1 on node 4]
 print(C1.nodes)
@@ -37,7 +37,7 @@ print(C1.nodes)
 
 print()
 print("Try dangling...")
-# PySpice is happy with that...
+# InSpice is happy with that...
 C2 = circuit.C(2, None, None, 2@u_uF)
 # But in fact, it creates a node 'None'
 print(C2.minus)
@@ -121,7 +121,7 @@ gnd & ( R21 | R22 ) & R23 & out
 
 ####################################################################################################
 
-# PySpice don't have "default circuit"
+# InSpice don't have "default circuit"
 # Need a way to create dangling element
 
 ####################################################################################################

@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2020 jmgc / Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,14 +28,14 @@ import numpy as np
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Probe.WaveForm import WaveForm
-from PySpice.Unit.Unit import UnitValues
-from PySpice.Unit import u_kHz
+from InSpice.Probe.WaveForm import WaveForm
+from InSpice.Unit.Unit import UnitValues
+from InSpice.Unit import u_kHz
 
 ####################################################################################################
 

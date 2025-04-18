@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2020 jmgc / Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -26,8 +26,8 @@ import unittest
 
 ####################################################################################################
 
-from PySpice.Spice.Netlist import Circuit
-from PySpice.Spice.Parser.Parser import SpiceParser
+from InSpice.Spice.Netlist import Circuit
+from InSpice.Spice.Parser.Parser import SpiceParser
 
 ####################################################################################################
 

@@ -6,7 +6,7 @@
 * using the "Nano-CMOS" form and using the default values.
 *
 * It has been slightly modified from its original for compliance
-* reasons with the PySpice python module
+* reasons with the InSpice python module
 * (renamed and cleaned of invisible characters causing errors)
 * Please refer to the PTM website and the related publications
 * for more information about the technology.

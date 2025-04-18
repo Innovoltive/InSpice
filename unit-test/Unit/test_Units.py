@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,16 +28,16 @@ from numpy import testing as np_test
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Unit import *
-from PySpice.Unit.SiUnits import *
-from PySpice.Unit.Unit import *
+from InSpice.Unit import *
+from InSpice.Unit.SiUnits import *
+from InSpice.Unit.Unit import *
 
-import PySpice.Unit.Unit as _Unit
+import InSpice.Unit.Unit as _Unit
 
 ####################################################################################################
 

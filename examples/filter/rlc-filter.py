@@ -13,14 +13,14 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Plot.BodeDiagram import bode_diagram
-from PySpice import Circuit, Simulator
-from PySpice.Unit import *
+from InSpice.Plot.BodeDiagram import bode_diagram
+from InSpice import Circuit, Simulator
+from InSpice.Unit import *
 
 ####################################################################################################
 

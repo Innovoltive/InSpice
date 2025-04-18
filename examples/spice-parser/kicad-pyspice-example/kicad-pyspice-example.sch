@@ -1,5 +1,5 @@
 EESchema Schematic File Version 2
-LIBS:kicad-pyspice-example-rescue
+LIBS:kicad-InSpice-example-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -11,7 +11,7 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
-LIBS:kicad-pyspice-example-cache
+LIBS:kicad-InSpice-example-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
@@ -27,7 +27,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L LM193-RESCUE-kicad-pyspice-example X3
+L LM193-RESCUE-kicad-InSpice-example X3
 U 1 1 55381082
 P 5450 3750
 F 0 "X3" H 5600 3900 60  0000 C CNN
@@ -60,7 +60,7 @@ F 3 "~" H 7300 3850 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R-RESCUE-kicad-pyspice-example R2
+L R-RESCUE-kicad-InSpice-example R2
 U 1 1 553812CC
 P 5850 4200
 F 0 "R2" V 5930 4200 40  0000 C CNN
@@ -71,7 +71,7 @@ F 3 "~" H 5850 4200 30  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R-RESCUE-kicad-pyspice-example R1
+L R-RESCUE-kicad-InSpice-example R1
 U 1 1 553812DB
 P 4450 3850
 F 0 "R1" V 4530 3850 40  0000 C CNN
@@ -82,7 +82,7 @@ F 3 "~" H 4450 3850 30  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND-RESCUE-kicad-pyspice-example #PWR01
+L GND-RESCUE-kicad-InSpice-example #PWR01
 U 1 1 553813CF
 P 4750 4900
 F 0 "#PWR01" H 4750 4900 30  0001 C CNN
@@ -136,7 +136,7 @@ F 3 "" H 4200 2750 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND-RESCUE-kicad-pyspice-example #PWR04
+L GND-RESCUE-kicad-InSpice-example #PWR04
 U 1 1 55381612
 P 4450 3150
 F 0 "#PWR04" H 4450 3150 30  0001 C CNN
@@ -170,7 +170,7 @@ Wire Wire Line
 Wire Wire Line
 	6750 4000 6750 4750
 $Comp
-L R-RESCUE-kicad-pyspice-example R3
+L R-RESCUE-kicad-InSpice-example R3
 U 1 1 5538F1ED
 P 6550 4300
 F 0 "R3" V 6630 4300 40  0000 C CNN

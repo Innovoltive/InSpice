@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.3
 #encoding utf-8
 #
-# LM193-RESCUE-kicad-pyspice-example
+# LM193-RESCUE-kicad-InSpice-example
 #
-DEF LM193-RESCUE-kicad-pyspice-example U 0 20 Y Y 2 F N
+DEF LM193-RESCUE-kicad-InSpice-example U 0 20 Y Y 2 F N
 F0 "U" 150 150 60 H V C CNN
-F1 "LM193-RESCUE-kicad-pyspice-example" 200 -200 60 H V C CNN
+F1 "LM193-RESCUE-kicad-InSpice-example" 200 -200 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW

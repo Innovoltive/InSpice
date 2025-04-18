@@ -1,7 +1,7 @@
 ####################################################################################################
 
-from PySpice.Spice.Netlist import SubCircuitFactory
-from PySpice.Unit import *
+from InSpice.Spice.Netlist import SubCircuitFactory
+from InSpice.Unit import *
 
 ####################################################################################################
 

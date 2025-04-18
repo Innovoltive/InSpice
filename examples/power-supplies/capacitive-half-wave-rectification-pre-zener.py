@@ -6,16 +6,16 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import plot, SpiceLibrary, Circuit, Simulator
-# from PySpice import *
-from PySpice.Unit import *
+from InSpice import plot, SpiceLibrary, Circuit, Simulator
+# from InSpice import *
+from InSpice.Unit import *
 
-from PySpice.Doc.ExampleTools import find_libraries
+from InSpice.Doc.ExampleTools import find_libraries
 libraries_path = find_libraries()
 spice_library = SpiceLibrary(libraries_path)
 

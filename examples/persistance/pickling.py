@@ -19,12 +19,12 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import plot
+from InSpice import plot
 
 from SimulateCircuit import simulate_circuit
 

@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -24,9 +24,9 @@ import unittest
 
 ####################################################################################################
 
-from PySpice.Spice.BasicElement import *
-from PySpice.Spice.Netlist import Circuit
-from PySpice.Unit import *
+from InSpice.Spice.BasicElement import *
+from InSpice.Spice.Netlist import Circuit
+from InSpice.Unit import *
 
 ####################################################################################################
 

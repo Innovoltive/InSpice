@@ -6,13 +6,13 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, Simulator
-from PySpice.Unit import *
+from InSpice import Circuit, Simulator
+from InSpice.Unit import *
 
 # from OperationalAmplifier import basic_comparator
 

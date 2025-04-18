@@ -1,13 +1,13 @@
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, SubCircuit, SubCircuitFactory
-from PySpice.Spice.Parser.HighLevelParser import SpiceSource
-from PySpice.Spice.Parser import Translator
-from PySpice.Unit import *
+from InSpice import Circuit, SubCircuit, SubCircuitFactory
+from InSpice.Spice.Parser.HighLevelParser import SpiceSource
+from InSpice.Spice.Parser import Translator
+from InSpice.Unit import *
 
 raw_spice = '''
 *.tile Qucs 25.1.1  ...

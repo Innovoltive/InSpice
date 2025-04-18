@@ -2,17 +2,17 @@
 
 ####################################################################################################
 
-from PySpice.Logging import Logging
+from InSpice.Logging import Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, Simulator
+from InSpice import Circuit, Simulator
 
 ####################################################################################################
 
 # pylint: disable=no-name-in-module
-from PySpice.Unit import (
+from InSpice.Unit import (
     kilo,
     as_Ω, u_kOhm, U_Ω, u_kΩ,
     u_Degree, u_Hz, u_mA, u_mH, u_ms, u_uF, u_V,

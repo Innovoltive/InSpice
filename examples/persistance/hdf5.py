@@ -20,12 +20,12 @@ from pathlib import Path
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Export.Hdf5 import Hdf5File
+from InSpice.Export.Hdf5 import Hdf5File
 
 from SimulateCircuit import simulate_circuit
 

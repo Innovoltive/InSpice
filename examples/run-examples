@@ -3,7 +3,7 @@
 
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ def run_example(file_name, no_gui=False):
     env = os.environ.copy()
     if no_gui:
         env['MPLBACKEND'] = 'Agg'  # Non-interactive matplotlib backend
-        env['PYSPICE_NO_DISPLAY'] = '1'  # Custom env var that can be checked in examples
+        env['InSpice_NO_DISPLAY'] = '1'  # Custom env var that can be checked in examples
     env['PYTHONUNBUFFERED'] = '1'  # Ensure output is displayed immediately
     
     try:
@@ -50,7 +50,7 @@ def run_example(file_name, no_gui=False):
         return False
 
 # Parse command line arguments
-parser = argparse.ArgumentParser(description='Run PySpice examples')
+parser = argparse.ArgumentParser(description='Run InSpice examples')
 parser.add_argument('--no-gui', action='store_true', help='Run without GUI and plots')
 args = parser.parse_args()
 

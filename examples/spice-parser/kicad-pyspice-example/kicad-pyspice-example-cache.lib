@@ -16,11 +16,11 @@ X P3 3 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# GND-RESCUE-kicad-pyspice-example
+# GND-RESCUE-kicad-InSpice-example
 #
-DEF ~GND-RESCUE-kicad-pyspice-example #PWR 0 0 Y Y 1 F P
+DEF ~GND-RESCUE-kicad-InSpice-example #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "GND-RESCUE-kicad-pyspice-example" 0 -70 30 H I C CNN
+F1 "GND-RESCUE-kicad-InSpice-example" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -51,11 +51,11 @@ X ~ 3 450 150 150 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# LM193-RESCUE-kicad-pyspice-example
+# LM193-RESCUE-kicad-InSpice-example
 #
-DEF LM193-RESCUE-kicad-pyspice-example U 0 20 Y Y 2 F N
+DEF LM193-RESCUE-kicad-InSpice-example U 0 20 Y Y 2 F N
 F0 "U" 150 150 60 H V C CNN
-F1 "LM193-RESCUE-kicad-pyspice-example" 200 -200 60 H V C CNN
+F1 "LM193-RESCUE-kicad-InSpice-example" 200 -200 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -73,11 +73,11 @@ X V+ 8 -100 400 250 D 40 40 2 1 W
 ENDDRAW
 ENDDEF
 #
-# R-RESCUE-kicad-pyspice-example
+# R-RESCUE-kicad-InSpice-example
 #
-DEF R-RESCUE-kicad-pyspice-example R 0 0 N Y 1 F N
+DEF R-RESCUE-kicad-InSpice-example R 0 0 N Y 1 F N
 F0 "R" 80 0 40 V V C CNN
-F1 "R-RESCUE-kicad-pyspice-example" 7 1 40 V V C CNN
+F1 "R-RESCUE-kicad-InSpice-example" 7 1 40 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST

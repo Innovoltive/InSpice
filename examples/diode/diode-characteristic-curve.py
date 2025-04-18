@@ -69,15 +69,15 @@ import matplotlib.ticker as ticker
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Doc.ExampleTools import find_libraries
-from PySpice import SpiceLibrary, Circuit, Simulator
-from PySpice.Unit import *
-from PySpice.Physics.SemiConductor import ShockleyDiode
+from InSpice.Doc.ExampleTools import find_libraries
+from InSpice import SpiceLibrary, Circuit, Simulator
+from InSpice.Unit import *
+from InSpice.Physics.SemiConductor import ShockleyDiode
 
 ####################################################################################################
 

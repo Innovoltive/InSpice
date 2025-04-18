@@ -1,6 +1,6 @@
-from PySpice.Doc.ExampleTools import find_libraries
-from PySpice import SpiceLibrary, Circuit, Simulator, plot
-from PySpice.Unit import *
+from InSpice.Doc.ExampleTools import find_libraries
+from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Unit import *
 
 ####################################################################################################
 

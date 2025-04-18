@@ -7,14 +7,14 @@ import matplotlib.pyplot as plt
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Doc.ExampleTools import find_libraries
-from PySpice import SpiceLibrary, Circuit, Simulator, plot
-from PySpice.Unit import *
+from InSpice.Doc.ExampleTools import find_libraries
+from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Unit import *
 
 ####################################################################################################
 

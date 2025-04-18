@@ -3,7 +3,7 @@ from pathlib import Path
 
 from KiCadRW.Schema import KiCadSchema
 from KiCadRW.Drawings.CircuitMacros import CircuitMacrosDumper
-from PySpice.KiCad import PythonDumper
+from InSpice.KiCad import PythonDumper
 
 ####################################################################################################
 
@@ -19,7 +19,7 @@ kicad_schema.dump_netlist()
 
 print()
 print('='*100)
-python_code = PythonDumper(kicad_schema, use_pyspice_unit=True)
+python_code = PythonDumper(kicad_schema, use_InSpice_unit=True)
 print(python_code)
 
 print()

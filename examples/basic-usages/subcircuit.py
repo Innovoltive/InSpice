@@ -6,22 +6,22 @@
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, SubCircuit, SubCircuitFactory
-from PySpice.Unit import *
+from InSpice import Circuit, SubCircuit, SubCircuitFactory
+from InSpice.Unit import *
 
 ####################################################################################################
 
-#r# There is two ways to define subcircuit with PySpice, either using
-#r# :class:`PySpice.Spice.Netlist.SubCircuit` or a simpler alternative
-#r# :class:`PySpice.Spice.Netlist.SubCircuitFactory`.
+#r# There is two ways to define subcircuit with InSpice, either using
+#r# :class:`InSpice.Spice.Netlist.SubCircuit` or a simpler alternative
+#r# :class:`InSpice.Spice.Netlist.SubCircuitFactory`.
 
 #r#
-#r# Let define a parallel resistor subcircuit using the :class:`PySpice.Spice.Netlist.SubCircuitFactory`
+#r# Let define a parallel resistor subcircuit using the :class:`InSpice.Spice.Netlist.SubCircuitFactory`
 
 class ParallelResistor(SubCircuitFactory):
     NAME = 'parallel_resistor'

@@ -2,8 +2,8 @@
 
 ####################################################################################################
 
-from PySpice.Spice.Netlist import SubCircuit
-from PySpice.Unit import *
+from InSpice.Spice.Netlist import SubCircuit
+from InSpice.Unit import *
 
 ####################################################################################################
 

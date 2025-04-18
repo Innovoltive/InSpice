@@ -39,7 +39,7 @@ yarn.lock
 .ipynb_checkpoints/
 .virtual_documents/
 
-PySpice.egg-info/
+InSpice.egg-info/
 build/
 dist/
 
@@ -110,7 +110,7 @@ examples/power-supplies/notes/
 examples/power-supplies/references/
 examples/power-supplies/__NOTES__.md
 
-examples/spice-parser/kicad-pyspice-example/kicad-pyspice-example.bak
+examples/spice-parser/kicad-InSpice-example/kicad-InSpice-example.bak
 
 ####################################################################################################
 
@@ -122,7 +122,7 @@ KiCadRW
 
 ####################################################################################################
 
-PySpice/Unit/numpy-notes.txt
+InSpice/Unit/numpy-notes.txt
 
 doc/extern/
 doc/logo/logo-square.png

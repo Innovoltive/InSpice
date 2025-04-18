@@ -42,7 +42,7 @@ version=1
 version=1
 LibDir=
 [eeschema/libraries]
-LibName1=kicad-pyspice-example-rescue
+LibName1=kicad-InSpice-example-rescue
 LibName2=power
 LibName3=device
 LibName4=transistors

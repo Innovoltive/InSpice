@@ -6,19 +6,19 @@
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Doc.ExampleTools import find_libraries
-from PySpice import(
+from InSpice.Doc.ExampleTools import find_libraries
+from InSpice import(
     SpiceLibrary,
     Circuit, SubCircuit, SubCircuitFactory,
     Simulator,
     plot,
 )
-from PySpice.Unit import *
+from InSpice.Unit import *
 
 ####################################################################################################
 

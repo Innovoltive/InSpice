@@ -1,7 +1,7 @@
 ####################################################################################################
 
-from PySpice import SubCircuitFactory
-from PySpice.Unit import *
+from InSpice import SubCircuitFactory
+from InSpice.Unit import *
 
 ####################################################################################################
 

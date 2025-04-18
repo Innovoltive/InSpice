@@ -1,6 +1,6 @@
 ####################################################################################################
 #
-# PySpice - A Spice Package for Python
+# InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
 #
 # This program is free software: you can redistribute it and/or modify
@@ -29,8 +29,8 @@ from scipy.linalg import solve
 
 ####################################################################################################
 
-from PySpice.Math import odd
-from PySpice.Math.Calculus import compute_exact_finite_difference_coefficients, derivative
+from InSpice.Math import odd
+from InSpice.Math.Calculus import compute_exact_finite_difference_coefficients, derivative
 
 ####################################################################################################
 

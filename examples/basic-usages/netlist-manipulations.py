@@ -6,13 +6,13 @@
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice import Circuit, SubCircuitFactory
-from PySpice.Unit import *
+from InSpice import Circuit, SubCircuitFactory
+from InSpice.Unit import *
 
 ####################################################################################################
 

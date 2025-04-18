@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "InSpice"
+dynamic = ["version"]
+description = "Python interface to Ngspice and Xyce circuit simulators (forked from InSpice)"
+readme = "README.md"
+authors = [
+    {name = "Innovoltive", email = "info@innovoltive.com"},
+]
+license = {text = "GPL-3.0-or-later"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "PyYAML",
+    "cffi>=1.0.0",
+    "diskcache",
+    "h5py",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Innovoltive/InSpice"
+"Bug Tracker" = "https://github.com/Innovoltive/InSpice/issues"
+
+[project.optional-dependencies]
+dev = ["pytest", "twine", "build"]
+
+[project.scripts]
+inspice-post-installation = "InSpice.Scripts.InSpice_post_installation:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["InSpice*"]
+namespaces = false
+
+[tool.setuptools.dynamic]
+version = {attr = "InSpice.__version__"}

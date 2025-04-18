@@ -18,12 +18,12 @@ from pathlib import Path
 
 ####################################################################################################
 
-import PySpice.Logging.Logging as Logging
+import InSpice.Logging.Logging as Logging
 logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from PySpice.Cache import SimulationCache
+from InSpice.Cache import SimulationCache
 
 from SimulateCircuit import simulate_circuit
 
