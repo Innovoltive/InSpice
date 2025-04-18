@@ -1,50 +1,21 @@
-#! /usr/bin/env python3
+from setuptools import setup, find_packages
 
-####################################################################################################
-#
-# PySpice - A Spice package for Python
-# Copyright (C) 2017 Fabrice Salvaire
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-####################################################################################################
-
-####################################################################################################
-
-import sys
-
-from setuptools import setup
-
-####################################################################################################
-
-# Check for python3 setup.py install
-required_python_version = (3, 6)
-if sys.version_info < required_python_version:
-    sys.stderr.write('ERROR: PySpice requires Python {}.{}\n'.format(*required_python_version))
-    sys.exit(1)
-
-####################################################################################################
-
-# Fixme: could check for ngspice, Xyce, libngspice.so etc.
-
-# check a simulator is installed
-# try:
-#     rc = subprocess.check_call(('ngspice', '--version'), stdout=sys.stderr)
-# except FileNotFoundError:
-#     sys.stderr.write('\n\nWarning: You must install ngspice\n\n')
-
-####################################################################################################
-
-from setup_data import setup_dict
-setup(**setup_dict)
+setup(
+    name="InSpice",
+    version="0.1.0",
+    description="Python interface to Ngspice and Xyce circuit simulators (forked from PySpice)",
+    author="Innovoltive",
+    author_email="info@innovoltive.com",
+    url="https://github.com/Innovoltive/InSpice",
+    packages=find_packages(),
+    install_requires=[
+        "numpy",
+        "matplotlib",
+    ],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "Operating System :: OS Independent",
+    ],
+    python_requires='>=3.8',
+)
