@@ -16,7 +16,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -50,9 +52,8 @@ diode = circuit.X('D', '1N5822', 'collector', 'VccAnalog')
 
 figure, ax = plt.subplots(figsize=(20, 10))
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=period/1000, end_time=period*1.1)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=period/1000, end_time=period*1.1)
 
 ax.set_title('')
 ax.set_xlabel('Time [s]')

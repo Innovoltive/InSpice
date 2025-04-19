@@ -17,8 +17,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator
-from InSpice.Spice.Parser import SpiceSource, Translator
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
+from InSpice.Spice.Parser import SpiceParser
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -48,13 +49,10 @@ print(source)
 
 ####################################################################################################
 
-spice_source = SpiceSource(source=source, title_line=False)
-bootstrap_circuit = Translator.Builder().translate(spice_source)
+parser = SpiceParser(source=source)
+bootstrap_circuit = parser.build_circuit()
 
 bootstrap_source = str(bootstrap_circuit)
 print(bootstrap_source)
 
 assert(source == bootstrap_source)
-# for line1, line2 in zip(source.splitlines(), bootstrap_source.splitlines()):
-#     if line1 != line2:
-#         print(f"!= '{line1}' / '{line2}'")

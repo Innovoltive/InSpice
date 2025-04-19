@@ -11,7 +11,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 # from OperationalAmplifier import basic_comparator
@@ -38,11 +38,10 @@ circuit.NonLinearVoltageSource(1, 'output', circuit.gnd,
                                       (micro(1), source.dc_value))
                                )
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-# simulation.initial_condition(comparator=0)  # Fixme: simulator.nodes.comparator == 0
-simulation.node_set(comparator=0)  # Fixme: simulator.nodes.comparator == 0
-analysis = simulation.transient(step_time=1@u_us, end_time=500@u_us)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+# simulator.initial_condition(comparator=0)  # Fixme: simulator.nodes.comparator == 0
+simulator.node_set(comparator=0)  # Fixme: simulator.nodes.comparator == 0
+analysis = simulator.transient(step_time=1@u_us, end_time=500@u_us)
 # Fixme: Xyce fails with Time step too small
 
 figure, ax = plt.subplots(figsize=(20, 10))

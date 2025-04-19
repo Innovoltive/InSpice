@@ -11,7 +11,8 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -24,9 +25,8 @@ circuit.LosslessTransmissionLine('delay', 'output', circuit.gnd, 'input', circui
                                  impedance=50, time_delay=40e-9)
 circuit.R('load', 'output', circuit.gnd, 50@u_Ω)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=1e-11, end_time=100e-9)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=1e-11, end_time=100e-9)
 
 ####################################################################################################
 

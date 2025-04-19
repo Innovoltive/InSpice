@@ -12,12 +12,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import(
-    SpiceLibrary,
-    Circuit, SubCircuit, SubCircuitFactory,
-    Simulator,
-    plot,
-)
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit, SubCircuit, SubCircuitFactory
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -61,11 +58,10 @@ print(str(circuit))
 
 ####################################################################################################
 
-simulator = Simulator.factory()
-simulator = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 # Fixme: python return code is not 0 on Windows if the following line is executed
 #        but any error is reported
-## analysis = simulation.dc(Vdd=slice(0, 5, .1)) # Fixme: ,Vsig=slice(1, 5, 1)
+## analysis = simulator.dc(Vdd=slice(0, 5, .1)) # Fixme: ,Vsig=slice(1, 5, 1)
 
 #r# To be completed ...
 

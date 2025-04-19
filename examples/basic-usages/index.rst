@@ -3,3 +3,5 @@
 ==============
 
 This section contains examples showing basic usages.
+
+.. end

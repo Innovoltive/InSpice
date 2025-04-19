@@ -24,7 +24,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -35,9 +35,8 @@ circuit.V('input', 1, circuit.gnd, 10@u_V)
 circuit.R(1, 1, 2, 2@u_kΩ)
 circuit.R(2, 2, circuit.gnd, 1@u_kΩ)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.operating_point()
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.operating_point()
 
 for node in analysis.nodes.values():
     print('Node {}: {:5.2f} V'.format(str(node), float(node))) # Fixme: format value + unit
@@ -70,8 +69,8 @@ circuit.R(2, 1, circuit.gnd, 1@u_kΩ)
 for resistance in (circuit.R1, circuit.R2):
     resistance.minus.add_current_probe(circuit) # to get positive value
 
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.operating_point()
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.operating_point()
 
 # Fixme: current over resistor
 for node in analysis.branches.values():

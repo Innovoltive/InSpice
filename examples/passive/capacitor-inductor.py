@@ -15,7 +15,8 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 from scipy.optimize import curve_fit
@@ -38,8 +39,6 @@ from scipy.optimize import curve_fit
 figure, (ax1, ax2) = plt.subplots(2, figsize=(20, 10))
 
 element_types = ('capacitor', 'inductor')
-
-simulator = Simulator.factory()
 
 for element_type in ('capacitor', 'inductor'):
 
@@ -66,9 +65,9 @@ for element_type in ('capacitor', 'inductor'):
     else:
         tau = circuit['L1'].inductance / circuit['R1'].resistance
 
-    simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+    simulator = circuit.simulator(temperature=25, nominal_temperature=25)
     step_time = 10@u_us
-    analysis = simulation.transient(step_time=step_time, end_time=source.period*3)
+    analysis = simulator.transient(step_time=step_time, end_time=source.period*3)
 
     # Let define the theoretical output voltage.
     if element_type == 'capacitor':

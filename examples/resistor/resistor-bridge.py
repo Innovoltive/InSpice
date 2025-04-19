@@ -7,7 +7,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -23,9 +23,8 @@ circuit.R(3, 2, circuit.gnd, 1@u_kΩ)
 circuit.R(4, 3, circuit.gnd, 2@u_kΩ)
 circuit.R(5, 3, 2, 2@u_kΩ)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.operating_point()
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.operating_point()
 
 for node in analysis.nodes.values():
     print('Node {}: {:4.1f} V'.format(str(node), float(node))) # Fixme: format value + unit

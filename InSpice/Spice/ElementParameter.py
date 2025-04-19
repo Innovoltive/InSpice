@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -27,7 +25,7 @@
 ####################################################################################################
 
 from ..Unit import Unit
-from .unit import str_spice
+from ..Tools.StringTools import str_spice
 
 ####################################################################################################
 
@@ -48,6 +46,7 @@ class ParameterDescriptor:
     ##############################################
 
     def __init__(self, default=None):
+
         self._default_value = default
         self._attribute_name = None
 
@@ -68,6 +67,7 @@ class ParameterDescriptor:
     ##############################################
 
     def __get__(self, instance, owner=None):
+
         try:
             return getattr(instance, '_' + self._attribute_name)
         except AttributeError:
@@ -86,7 +86,9 @@ class ParameterDescriptor:
     ##############################################
 
     def validate(self, value):
+
         """Validate the parameter's value."""
+
         return value
 
     ##############################################
@@ -97,7 +99,9 @@ class ParameterDescriptor:
     ##############################################
 
     def to_str(self, instance):
+
         """Convert the parameter's value to SPICE syntax."""
+
         raise NotImplementedError
 
     ##############################################
@@ -124,7 +128,9 @@ class PositionalElementParameter(ParameterDescriptor):
     ##############################################
 
     def __init__(self, position, default=None, key_parameter=False):
+
         super().__init__(default)
+
         self._position = position
         self._key_parameter = key_parameter
 
@@ -179,12 +185,14 @@ class FloatPositionalParameter(PositionalElementParameter):
     ##############################################
 
     def __init__(self, position, unit=None, **kwargs):
+
         super().__init__(position, **kwargs)
         self._unit = unit
 
     ##############################################
 
     def validate(self, value):
+
         if isinstance(value, Unit):
             return value
         else:
@@ -204,6 +212,7 @@ class InitialStatePositionalParameter(PositionalElementParameter):
     ##############################################
 
     def to_str(self, instance):
+
         if self.__get__(instance):
             return 'on'
         else:
@@ -236,7 +245,9 @@ class FlagParameter(ParameterDescriptor):
     ##############################################
 
     def __init__(self, spice_name, default=False):
+
         super().__init__(default)
+
         self.spice_name = spice_name
 
     ##############################################
@@ -247,6 +258,7 @@ class FlagParameter(ParameterDescriptor):
     ##############################################
 
     def to_str(self, instance):
+
         if self.nonzero(instance):
             return 'off'
         else:
@@ -268,7 +280,9 @@ class KeyValueParameter(ParameterDescriptor):
     ##############################################
 
     def __init__(self, spice_name, default=None):
+
         super().__init__(default)
+
         self.spice_name = spice_name
 
     ##############################################
@@ -279,9 +293,9 @@ class KeyValueParameter(ParameterDescriptor):
     ##############################################
 
     def to_str(self, instance):
+
         if bool(self):
-            _ = self.str_value(instance)
-            return f'{self.spice_name}={_}'
+            return '{}={}'.format(self.spice_name, self.str_value(instance))
         else:
             return ''
 
@@ -299,6 +313,7 @@ class BoolKeyParameter(KeyValueParameter):
     ##############################################
 
     def str_value(self, instance):
+
         if self.nonzero(instance):
             return '1'
         else:
@@ -324,6 +339,7 @@ class FloatKeyParameter(KeyValueParameter):
     ##############################################
 
     def __init__(self, spice_name, unit=None, **kwargs):
+
         super().__init__(spice_name, **kwargs)
         self._unit = unit
 
@@ -341,6 +357,7 @@ class FloatPairKeyParameter(KeyValueParameter):
     ##############################################
 
     def validate(self, pair):
+
         if len(pair) == 2:
             return (float(pair[0]), float(pair[1]))
         else:
@@ -360,6 +377,7 @@ class FloatTripletKeyParameter(FloatPairKeyParameter):
     ##############################################
 
     def validate(self, uplet):
+
         if len(uplet) == 3:
             return (float(uplet[0]), float(uplet[1]), float(uplet[2]))
         else:

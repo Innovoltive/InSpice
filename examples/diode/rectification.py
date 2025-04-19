@@ -12,7 +12,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -32,9 +34,8 @@ source = circuit.SinusoidalVoltageSource('input', 'in', circuit.gnd, amplitude=1
 circuit.X('D1', '1N4148', 'in', 'output')
 circuit.R('load', 'output', circuit.gnd, 100@u_Ω)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 ax1.set_title('Half-Wave Rectification')
 ax1.set_xlabel('Time [s]')
@@ -51,8 +52,8 @@ ax1.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
 circuit.C('1', 'output', circuit.gnd, 1@u_mF)
 
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 ax2.set_title('Half-Wave Rectification with filtering')
 ax2.set_xlabel('Time [s]')
@@ -74,8 +75,8 @@ circuit.X('D2', '1N4148', 'output_minus', circuit.gnd)
 circuit.X('D3', '1N4148', circuit.gnd, 'output_plus')
 circuit.X('D4', '1N4148', 'output_minus', 'in')
 
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 ax3.set_title('Full-Wave Rectification')
 ax3.set_xlabel('Time [s]')
@@ -92,8 +93,8 @@ ax3.set_ylim(float(-source.amplitude*1.1), float(source.amplitude*1.1))
 
 circuit.C('1', 'output_plus', 'output_minus', 1@u_mF)
 
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 ax4.set_title('Full-Wave Rectification with filtering')
 ax4.set_xlabel('Time [s]')
@@ -130,10 +131,10 @@ circuit.C('1', 'output_plus', node_115, 1@u_mF)
 circuit.C('2', node_115, 'output_minus', 1@u_mF)
 circuit.R('load', 'output_plus', 'output_minus', 10@u_Ω)
 
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 if on_115:
-    simulation.initial_condition(node_115=0)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+    simulator.initial_condition(node_115=0)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 figure2, ax = plt.subplots(figsize=(20, 10))
 ax.set_title('115/230V Rectifier')

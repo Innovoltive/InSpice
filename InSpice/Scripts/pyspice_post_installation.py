@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2020 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -35,13 +33,6 @@ import sys
 import tempfile
 
 import requests
-
-from colorama import just_fix_windows_console, Fore, Style
-just_fix_windows_console()
-# init(autoreset=True)
-SRA = Style.RESET_ALL
-RED = Fore.RED
-BLUE = Fore.BLUE
 
 ####################################################################################################
 
@@ -83,8 +74,9 @@ class CircuitTest:
 
     ##############################################
 
-    def test_spinit(self) -> None:
-        from InSpice import Circuit, Simulator
+    def test_spinit(self):
+
+        from InSpice.Spice.Netlist import Circuit
         import InSpice.Unit as U
 
         circuit = Circuit('Test')
@@ -104,10 +96,9 @@ class CircuitTest:
         #                                       (U.micro(1), source.dc_value))
         # )
 
-        simulator = Simulator.factory()
-        simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-        simulation.initial_condition(comparator=0)  # Fixme: simulator.nodes.comparator == 0
-        analysis = simulation.transient(step_time=1@U.u_us, end_time=500@U.u_us)
+        simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+        simulator.initial_condition(comparator=0)  # Fixme: simulator.nodes.comparator == 0
+        analysis = simulator.transient(step_time=1@U.u_us, end_time=500@U.u_us)
 
         if (len(analysis.output)) < 500:
             raise NameError('Simualtion failed')
@@ -127,40 +118,46 @@ class InSpicePostInstallation:
 
     ##############################################
 
-    def run(self) -> None:
-        parser = argparse.ArgumentParser(
-            description='Tool to perform InSpice Post Installation.',
-        )
+    def run(self):
+
+        parser = argparse.ArgumentParser(description='Tool to perform InSpice Post Installation.')
+
         parser.add_argument(
             '--ngspice-version',
             type=int, default=None,
             help='NgSpice version to install',
         )
+
         parser.add_argument(
             '--install-ngspice-dll',
             action='store_true',
             help='install Windows DLL',
         )
+
         parser.add_argument(
             '--force-install-ngspice-dll',
             action='store_true',
             help='force DLL installation (for debug only)',
         )
+
         parser.add_argument(
             '--download-ngspice-manual',
             action='store_true',
             help='download Ngspice manual',
         )
+
         parser.add_argument(
             '--check-install',
             action='store_true',
             help='check installation',
         )
+
         parser.add_argument(
             '--download-example',
             action='store_true',
             help='download examples',
         )
+
         self._args = parser.parse_args()
 
         count = 0
@@ -185,7 +182,7 @@ class InSpicePostInstallation:
 
     ##############################################
 
-    def _download_file(self, url, dst_path) -> None:
+    def _download_file(self, url, dst_path):
         print('Get {} ... -> {}'.format(url, dst_path))
         response = requests.get(url, allow_redirects=True)
         if response.status_code != requests.codes.ok:
@@ -196,7 +193,7 @@ class InSpicePostInstallation:
     ##############################################
 
     @property
-    def ngspice_version(self) -> str:
+    def ngspice_version(self):
         if not hasattr(self, '_ngspice_version'):
             version = self._args.ngspice_version
             if version is None:
@@ -207,7 +204,8 @@ class InSpicePostInstallation:
 
     ##############################################
 
-    def install_ngspice_dll(self) -> None:
+    def install_ngspice_dll(self):
+
         if not(os.name == 'nt' or self._args.force_install_ngspice_dll):
             return
 
@@ -275,15 +273,19 @@ class InSpicePostInstallation:
 
     ##############################################
 
-    def check_installation(self) -> None:
+    def check_installation(self):
+
         """Tool to check InSpice is correctly installed.
 
         """
-        print(f'{RED}OS: {BLUE}{sys.platform}{SRA}')
+
+        import ctypes.util
+
+        print('OS:', sys.platform)
         print()
 
-        print(f'{RED}Environments:{SRA}')
-        for env in (
+        print('Environments:')
+        for _ in (
                 'PATH',
                 'LD_LIBRARY_PATH',
                 'PYTHONPATH',
@@ -297,22 +299,20 @@ class InSpicePostInstallation:
                 'SPICE_NO_DATASEG_CHECK',
                 'NGSPICE_INPUT_DIR',
         ):
-            _ = os.environ.get(env, 'undefined')
-            print(f'  {env} {_}')
+            print(_, os.environ.get(_, 'undefined'))
         print()
 
         if 'VIRTUAL_ENV' in os.environ:
-            print(f'{RED}On Virtual Environment:{SRA}')
-            for env in (
+            print('On Virtual Environment:')
+            for _ in (
                     'VIRTUAL_ENV',
             ):
-                _ = os.environ.get(env, 'undefined')
-                print(f'  {env} {BLUE}{_}{SRA}')
+                print(_, os.environ.get(_, 'undefined'))
             print()
 
         if 'CONDA_PREFIX' in os.environ:
-            print(f'{RED}On Anaconda:{SRA}')
-            for env in (
+            print('On Anaconda:')
+            for _ in (
                     # not specific
                     'CONDA_EXE',
                     'CONDA_PYTHON_EXE',
@@ -323,84 +323,81 @@ class InSpicePostInstallation:
                     'CONDA_PREFIX',
                     # 'CONDA_PROMPT_MODIFIER',
             ):
-                _ = os.environ.get(env, 'undefined')
-                print(f'  {env} {_}')
+                print(_, os.environ.get(_, 'undefined'))
             print()
 
         try:
-            print(f'{RED}Load InSpice module{SRA}')
+            print('Load InSpice module')
             import InSpice
-            print(f'  loaded {InSpice.__file__} version {BLUE}{InSpice.__version__}{SRA}')
+            print('loaded {} version {}'.format(InSpice.__file__, InSpice.__version__))
             print()
         except ModuleNotFoundError:
-            print('{RED}InSpice module not found{SRA}')
+            print('InSpice module not found')
             return
 
         import InSpice.Logging.Logging as Logging
-        logger = Logging.setup_logging()   # logging_level='INFO'
+        logger = Logging.setup_logging(logging_level='INFO')
 
         from InSpice.Config import ConfigInstall
         from InSpice.Spice import NgSpice
         from InSpice.Spice.NgSpice import NGSPICE_SUPPORTED_VERSION
         from InSpice.Spice.NgSpice.Shared import NgSpiceShared
 
-        print(f'{RED}ngspice supported version: {BLUE}{NGSPICE_SUPPORTED_VERSION}{SRA}')
+        print('ngspice supported version:', NGSPICE_SUPPORTED_VERSION)
         print()
 
         ##############################################
 
         message = os.linesep.join((
-            f'{RED}NgSpiceShared configuration is{SRA}',
-            f'  NgSpiceShared.NGSPICE_PATH = {NgSpiceShared.NGSPICE_PATH}',
-            f'  NgSpiceShared.LIBRARY_PATH = {NgSpiceShared.LIBRARY_PATH}',
+            'NgSpiceShared configuration is',
+            '  NgSpiceShared.NGSPICE_PATH = {0.NGSPICE_PATH}',
+            '  NgSpiceShared.LIBRARY_PATH = {0.LIBRARY_PATH}',
         ))
-        print(message)
+        print(message.format(NgSpiceShared))
         print()
 
         ##############################################
 
         cwd = Path(os.curdir).resolve()
-        print(f'{RED}Working directory:{SRA}', cwd)
+        print('Working directory:', cwd)
         print()
 
-        locale_ngspice = cwd.joinpath(f'ngspice-{NGSPICE_SUPPORTED_VERSION}')
+        locale_ngspice = cwd.joinpath('ngspice-{}'.format(NGSPICE_SUPPORTED_VERSION))
         if locale_ngspice.exists() and locale_ngspice.is_dir():
-            print(f'{RED}Found local ngspice:{SRA}')
-            for root, _, filenames in locale_ngspice.walk(follow_symlinks=True):
+            print('Found local ngspice:')
+            for root, _, filenames in os.walk(locale_ngspice, followlinks=True):
                 for filename in filenames:
-                    print(f'  {root} {filename}')
+                    print(root, filename)
             print()
 
+
         ngspice_module_path = Path(NgSpice.__file__).parent
-        print(f'{RED}NgSpice:{SRA} {ngspice_module_path}')
-        for root, _, filenames in ngspice_module_path.walk():
+        print('NgSpice:', ngspice_module_path)
+        for root, _, filenames in os.walk(ngspice_module_path):
             for filename in filenames:
-                print(f'  {root} {filename}')
+                print(root, filename)
         print()
 
         ##############################################
 
         if ConfigInstall.OS.on_windows:
-            os_ = 'Windows'
+            print('OS is Windows')
             library = NgSpiceShared.LIBRARY_PATH
         elif ConfigInstall.OS.on_osx:
-            os_ = 'OSX'
+            print('OS is OSX')
             library = 'ngspice'
         elif ConfigInstall.OS.on_linux:
-            os_ = 'Linux'
+            print('OS is Linux')
             library = 'ngspice'
         else:
             raise NotImplementedError
 
-        print(f'{RED}OS is {BLUE}{os_}{SRA}')
-        print(f'{RED}Search: {BLUE}{library}{SRA}')
-        library_path = NgSpiceShared.find_library(library)
-        print(f'{RED}Found in library search path: {BLUE}{library_path}{SRA}')
+        library_path = ctypes.util.find_library(library)
+        print('Found in library search path: {}'.format(library_path))
 
         ##############################################
 
-        print()
-        print(f'{RED}Load NgSpiceShared{SRA}')
+        print('\nLoad NgSpiceShared')
         ngspice = NgSpiceShared.new_instance(verbose=True)
 
         if ConfigInstall.OS.on_linux:
@@ -408,41 +405,42 @@ class InSpicePostInstallation:
             # Apparently there is no simple way to get the path of the loaded library ...
             # But we can look in the process maps
             pid = os.getpid()
-            maps_path = f'/proc/{pid}/maps'
-            with open(maps_path, encoding='utf8') as fh:
+            maps_path = '/proc/{}/maps'.format(pid)
+            with open(maps_path) as fh:
                 for line in fh:
                     if '.so' in line and 'ngspice' in line:
                         parts = [x for x in line.split() if x]
                         path = parts[-1]
-                        print(f'  {RED}loaded {BLUE}{path}{SRA}')
+                        print('loaded {}'.format(path))
                         break
         print()
 
         if ngspice.spinit_not_found:
-            print('{RED}WARNING: spinit was not found{SRA}')
+            print('WARNING: spinit was not found')
             print()
 
         message = os.linesep.join((
-            f'{RED}Ngspice version is {BLUE}{ngspice.ngspice_version}{SRA}',
-            f'  has xspice: {ngspice.has_xspice}',
-            f'  has cider {ngspice.has_cider}',
+            'Ngspice version is {0.ngspice_version}',
+            '  has xspice: {0.has_xspice}',
+            '  has cider {0.has_cider}',
         ))
-        print(message)
+        print(message.format(ngspice))
         print()
 
         command = 'version -f'
-        print(f'{RED}> {command}{SRA}')
+        print('> ' + command)
         print(ngspice.exec_command(command))
         print()
 
         circuit_test = CircuitTest()
         circuit_test.test_spinit()
 
-        print(f'{RED}InSpice should work as expected{SRA}')
+        print('InSpice should work as expected')
 
     ##############################################
 
-    def download_example(self) -> None:
+    def download_example(self):
+
         import InSpice
         version = InSpice.__version__
 
@@ -467,6 +465,6 @@ class InSpicePostInstallation:
 
 ####################################################################################################
 
-def main() -> None:
+def main():
     _ = InSpicePostInstallation()
     return _.run()

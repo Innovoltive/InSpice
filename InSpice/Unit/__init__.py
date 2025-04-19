@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2017 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -113,23 +111,29 @@ class UnitValueShorcut:
     ##############################################
 
     def __init__(self, prefixed_unit):
+
         self._prefixed_unit = prefixed_unit
 
     ##############################################
 
     def _new_value(self, other):
+
         return self._prefixed_unit.new_value(other)
 
     ##############################################
 
     def __call__(self, other):
+
         """self(other)"""
+
         return self._new_value(other)
 
     ##############################################
 
     def __rmatmul__(self, other):
+
         """other @ self"""
+
         return self._new_value(other)
 
 ####################################################################################################
@@ -144,7 +148,7 @@ def _to_ascii(name):
         ascii_name = ascii_name.replace(*args)
     return ascii_name
 
-def define_shortcut(name, shortcut):
+def define_shortcut(name, shortcut) :
     # ° is illegal in Python 3.5
     #  see https://docs.python.org/3/reference/lexical_analysis.html#identifiers
     #      https://www.python.org/dev/peps/pep-3131/
@@ -168,7 +172,7 @@ def _build_prefix_shortcut(unit_prefix):
 
 for unit_prefix in _Unit.UnitPrefixMetaclass.prefix_iter():
     if unit_prefix.__class__ != _Unit.ZeroPower:
-        _build_prefix_shortcut(unit_prefix)   # capture unit_prefix
+        _build_prefix_shortcut(unit_prefix) # capture unit_prefix
 
 ####################################################################################################
 
@@ -178,13 +182,13 @@ class FrequencyValue(_Unit.UnitValue, _Unit.FrequencyMixin):
     pass
 
 # Fixme:
-class FrequencyValues(_Unit.UnitValues):   # , _Unit.FrequencyMixin
+class FrequencyValues(_Unit.UnitValues): # , _Unit.FrequencyMixin
     pass
 
 class PeriodValue(_Unit.UnitValue, _Unit.PeriodMixin):
     pass
 
-class PeriodValues(_Unit.UnitValues):   # , _Unit.PeriodMixin
+class PeriodValues(_Unit.UnitValues): # , _Unit.PeriodMixin
     pass
 
 ####################################################################################################

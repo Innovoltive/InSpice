@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -26,7 +24,7 @@ import unittest
 
 ####################################################################################################
 
-from InSpice.Spice.Parser.Parser import SpiceParser
+from InSpice.Spice.Expression.Parser import Parser
 
 ####################################################################################################
 
@@ -36,46 +34,50 @@ class TestParser(unittest.TestCase):
 
     def test_parser(self):
 
-        parser = SpiceParser()
+        parser = Parser()
 
-        # Test commands with numeric expressions
-        parser.parse('R1 1 0 1')
-        parser.parse('R2 1 0 .1')
-        parser.parse('R3 1 0 .123')
-        parser.parse('R4 1 0 1.')
-        parser.parse('R5 1 0 1.1')
-        parser.parse('R6 1 0 1.123')
-        parser.parse('R7 1 0 1.e2')
-        parser.parse('R8 1 0 1.e-2')
-        parser.parse('R9 1 0 1.123e2')
-        parser.parse('R10 1 0 1.123e-2')
-        parser.parse('R11 1 0 1.123e23')
-        parser.parse('R12 1 0 1.123e-23')
+        parser.parse('1')
 
-        parser.parse('R13 1 0 -1')
-        parser.parse('R14 1 0 -1.1')
+        parser.parse('.1')
+        parser.parse('.123')
+        parser.parse('1.')
+        parser.parse('1.1')
+        parser.parse('1.123')
+        parser.parse('1.e2')
+        parser.parse('1.e-2')
+        parser.parse('1.123e2')
+        parser.parse('1.123e-2')
+        parser.parse('1.123e23')
+        parser.parse('1.123e-23')
 
-        # Test behavioural sources with expressions
-        parser.parse('B1 1 0 V=1 ** 2')
-        parser.parse('B2 1 0 V=1 * 2')
-        parser.parse('B3 1 0 V=1 / 2')
-        parser.parse('B4 1 0 V=1 % 2')
-        parser.parse('B5 1 0 V=1 + 2')
+        parser.parse('-1')
+        parser.parse('-1.1')
 
-        # Test if statements and comparisons in expressions
-        parser.parse('B6 1 0 V=1 == 2 ? 3 : 4')
-        parser.parse('B7 1 0 V=1 != 2 ? 3 : 4')
-        parser.parse('B8 1 0 V=1 >= 2 ? 3 : 4')
-        parser.parse('B9 1 0 V=1 < 2 ? 3 : 4')
-        parser.parse('B10 1 0 V=1 > 2 ? 3 : 4')
+        parser.parse('! rised')
 
-        # Test boolean operations
-        parser.parse('B11 1 0 V=x && y ? 1 : 0')
-        parser.parse('B12 1 0 V=x || y ? 1 : 0')
+        parser.parse('1 ** 2')
 
-        # Test combination of operations
-        parser.parse('B13 1 0 V=1 * -2')
-        parser.parse('B14 1 0 V=x * -y + z')
+        parser.parse('1 * 2')
+        parser.parse('1 / 2')
+        parser.parse('1 % 2')
+        # parser.parse('1 \\ 2')
+        parser.parse('1 + 2')
+
+        parser.parse('1 == 2')
+        parser.parse('1 != 2')
+        parser.parse('1 >= 2')
+        parser.parse('1 >= 2')
+        parser.parse('1 < 2')
+        parser.parse('1 > 2')
+
+        parser.parse('x && y')
+        parser.parse('x || y')
+
+        parser.parse('c ? x : y')
+
+        parser.parse('1 * -2')
+
+        parser.parse('x * -y + z')
 
 ####################################################################################################
 

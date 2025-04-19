@@ -16,7 +16,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -72,10 +74,9 @@ circuit.X('ring_modulator', 'RingModulator',
 
 circuit.R('load', 'output', circuit.gnd, 1@u_kΩ)
 
-### simulator = Simulator.factory()
-### simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+### simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 ### # simulator.initial_condition(input_top=0, input_bottom=0, output_top=0, output_bottom=0)
-### analysis = simulation.transient(step_time=modulator.period/1000, end_time=modulator.period)
+### analysis = simulator.transient(step_time=modulator.period/1000, end_time=modulator.period)
 ###
 ### figure = plt.figure(1, (20, 10))
 ### plt.title('Ring Modulator')

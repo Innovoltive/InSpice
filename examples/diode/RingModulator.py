@@ -1,6 +1,6 @@
 ####################################################################################################
 
-from InSpice import SubCircuitFactory
+from InSpice.Spice.Netlist import SubCircuitFactory
 from InSpice.Unit import *
 
 ####################################################################################################

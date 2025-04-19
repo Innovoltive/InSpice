@@ -13,7 +13,8 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
+from InSpice.Spice.Library import SpiceLibrary
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -36,9 +37,8 @@ circuit.R(1, 'in', 'out', 1@u_Ω) # not required for simulation
 # circuit.X('D1', '1N4148', 'out', circuit.gnd)
 circuit.X('DZ1', 'd1n5919brl', 'out', circuit.gnd)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.dc(Vinput=slice(-10, 2, .05)) # 10mV
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.dc(Vinput=slice(-10, 2, .05)) # 10mV
 
 figure, (ax1, ax2) = plt.subplots(2, figsize=(20, 10))
 
@@ -61,7 +61,7 @@ ax2.grid()
 # U = RI   R = U/I
 dynamic_resistance = np.diff(-analysis.out) / np.diff(analysis.Vinput)
 # ax2.plot(analysis.out[:-1], dynamic_resistance/1000)
-ax2.semilogy(analysis.out[10:-1], dynamic_resistance[10:])
+ax2.semilogy(analysis.out[10:-1], dynamic_resistance[10:], basey=10)
 ax2.axvline(x=0, color='black')
 ax2.axvline(x=-5.6, color='red')
 ax2.legend(('Dynamic Resistance',), loc=(.1,.8))

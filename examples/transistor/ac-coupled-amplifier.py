@@ -16,7 +16,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -48,9 +50,8 @@ figure, ax = plt.subplots(figsize=(20, 10))
 
 # .ac dec 5 10m 1G
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*2)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*2)
 
 ax.set_title('')
 ax.set_xlabel('Time [s]')

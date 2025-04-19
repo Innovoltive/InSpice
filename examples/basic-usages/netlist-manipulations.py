@@ -11,7 +11,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, SubCircuitFactory
+from InSpice.Spice.Netlist import Circuit, SubCircuitFactory
 from InSpice.Unit import *
 
 ####################################################################################################

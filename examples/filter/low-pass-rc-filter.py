@@ -14,7 +14,7 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Plot.BodeDiagram import bode_diagram
-from InSpice import Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -33,9 +33,8 @@ break_frequency = 1 / (2 * math.pi * float(R1.resistance * C1.capacitance))
 print("Break frequency = {:.1f} Hz".format(break_frequency))
 #o#
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.ac(start_frequency=1@u_Hz, stop_frequency=1@u_MHz, number_of_points=10,  variation='dec')
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.ac(start_frequency=1@u_Hz, stop_frequency=1@u_MHz, number_of_points=10,  variation='dec')
 # print(analysis.out)
 
 #r# We plot the Bode diagram.

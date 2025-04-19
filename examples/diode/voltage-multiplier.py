@@ -13,7 +13,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -40,9 +42,8 @@ for i in range(multiplier):
     circuit.X(i, '1N4148', midlle_node, bottom_node)
 circuit.R(1, multiplier, multiplier+1, 1@u_MΩ)
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=source.period/200, end_time=source.period*20)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=source.period/200, end_time=source.period*20)
 
 ####################################################################################################
 

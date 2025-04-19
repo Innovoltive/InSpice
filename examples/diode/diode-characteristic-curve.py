@@ -75,7 +75,8 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
+from InSpice.Spice.Library import SpiceLibrary
 from InSpice.Unit import *
 from InSpice.Physics.SemiConductor import ShockleyDiode
 
@@ -93,22 +94,20 @@ spice_library = SpiceLibrary(libraries_path)
 
 circuit = Circuit('Diode Characteristic Curve')
 
+circuit.include(spice_library['1N4148'])
+
 circuit.V('input', 'in', circuit.gnd, 10@u_V)
 circuit.R(1, 'in', 'out', 1@u_Ω) # not required for simulation
-D1N4148 = spice_library['1N4148']
-circuit.include(D1N4148)
 circuit.X('D1', '1N4148', 'out', circuit.gnd)
-# circuit.X('D1', D1N4148, cathode='out', anode=circuit.gnd)
 
 #r# We simulate the circuit at these temperatures: 0, 25 and 100 °C.
 
 # Fixme: Xyce ???
 temperatures = [0, 25, 100]@u_Degree
 analyses = {}
-simulator = Simulator.factory()
 for temperature in temperatures:
-    simulation = simulator.simulation(circuit, temperature=temperature, nominal_temperature=temperature)
-    analysis = simulation.dc(Vinput=slice(-2, 5, .01))
+    simulator = circuit.simulator(temperature=temperature, nominal_temperature=temperature)
+    analysis = simulator.dc(Vinput=slice(-2, 5, .01))
     analyses[float(temperature)] = analysis
 
 ####################################################################################################
@@ -185,8 +184,8 @@ ax2.axvspan(silicon_forward_voltage_threshold, 3, facecolor='blue', alpha=.2)
 analysis = analyses[25]
 static_resistance = -analysis.out / analysis.Vinput
 dynamic_resistance = np.diff(-analysis.out) / np.diff(analysis.Vinput)
-ax2.semilogy(analysis.out, static_resistance, base=10)
-ax2.semilogy(analysis.out[10:-1], dynamic_resistance[10:], base=10)
+ax2.semilogy(analysis.out, static_resistance, basey=10)
+ax2.semilogy(analysis.out[10:-1], dynamic_resistance[10:], basey=10)
 ax2.axvline(x=0, color='black')
 ax2.axvline(x=silicon_forward_voltage_threshold, color='red')
 ax2.axhline(y=1, color='red')

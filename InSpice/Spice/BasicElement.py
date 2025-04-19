@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -100,20 +98,10 @@ See Ngspice documentation for details.
 ####################################################################################################
 
 import logging
-from typing import TYPE_CHECKING
 
-# pylint: disable=no-name-in-module
+from ..Tools.StringTools import str_spice, join_list, join_dict
 from ..Unit import U_m, U_s, U_A, U_V, U_Degree, U_Ω, U_F, U_H, U_Hz
-# pylint: enable=no-name-in-module
-from .Element import (
-    Element,
-    AnyPinElement,
-    FixedPinElement,
-    NPinElement,
-    OptionalPin,
-    DipoleElement,
-    TwoPortElement,
-)
+from .Netlist import (Element, AnyPinElement, FixedPinElement, NPinElement, OptionalPin)
 from .ElementParameter import (
     # KeyValueParameter,
     BoolKeyParameter,
@@ -128,17 +116,21 @@ from .ElementParameter import (
     InitialStatePositionalParameter,
     IntKeyParameter,
     ModelPositionalParameter,
-)
-from . import Library
-from .StringTools import join_list, join_dict
-from .unit import str_spice
-
-if TYPE_CHECKING:
-    from .Netlist import Netlist
+    )
 
 ####################################################################################################
 
 _module_logger = logging.getLogger(__name__)
+
+####################################################################################################
+
+class DipoleElement(FixedPinElement):
+    """This class implements a base class for dipole element."""
+    PINS = ('plus', 'minus')
+
+class TwoPortElement(FixedPinElement):
+    """This class implements a base class for two-port element."""
+    PINS = ('output_plus', 'output_minus', 'input_plus', 'input_minus')
 
 ####################################################################################################
 
@@ -167,28 +159,10 @@ class SubCircuitElement(NPinElement):
 
     ##############################################
 
-    def __init__(
-        self,
-        netlist: 'Netlist',
-        name: str,
-        subcircuit_name: str | Library.Subcircuit,
-        *nodes,
-        **parameters,
-    ) -> None:
-        if isinstance(subcircuit_name, Library.Subcircuit):
-            subcircuit = subcircuit_name
-            subcircuit_name = subcircuit.name
-            pins = {}
-            for pin in subcircuit.pin_names:
-                _ = parameters.pop(pin, None)
-                if _ is None:
-                    raise ValueError(f"Missing pin {pin} for subcircuit {subcircuit_name}")
-                pins[pin] = _
-            nodes = subcircuit.map_nodes(**pins)
-            # isinstance(netlist, Circuit)
-            if hasattr(netlist, 'include'):
-                netlist.include(subcircuit)
+    def __init__(self, netlist, name, subcircuit_name, *nodes, **parameters):
+
         super().__init__(netlist, name, nodes, subcircuit_name)
+
         # Fixme: match parameters to subcircuit
         self.parameters = parameters
 
@@ -201,18 +175,21 @@ class SubCircuitElement(NPinElement):
 
     ##############################################
 
-    def copy_to(self, netlist: 'Netlist') -> Element:
+    def copy_to(self, netlist):
+
         element = self.__class__(netlist, self._name, self.subcircuit_name, *self.node_names, **self.parameters)
         # Element.copy_to(self, element)
         return element
 
     ##############################################
 
-    def format_spice_parameters(self) -> str:
+    def format_spice_parameters(self):
         """ Return the formatted list of parameters. """
+
         spice_parameters = super().format_spice_parameters()
         if self.parameters:
             spice_parameters += ' ' + join_dict(self.parameters)
+
         return spice_parameters
 
 ####################################################################################################
@@ -687,10 +664,12 @@ class CoupledInductor(AnyPinElement):
 
     _logger = _module_logger.getChild('CoupledInductor')
 
-    ##############################################
+ ##############################################
 
-    def __init__(self, name: str, *args, **kwargs) -> None:
+    def __init__(self, name, *args, **kwargs):
+
         super().__init__(name, *args, **kwargs)
+
         self._inductors = []
         for inductor in (self.inductor1, self.inductor2):
             try:
@@ -699,9 +678,9 @@ class CoupledInductor(AnyPinElement):
                 try:
                     inductor = 'L' + inductor
                     self.netlist.element(inductor)
-                    self._logger.info(f'Prefixed element {inductor}')
+                    self._logger.info('Prefixed element {}'.format(inductor))
                 except KeyError:
-                    raise ValueError(f'Element with name {inductor} not found')
+                    raise ValueError('Element with name {} not found'.format(inductor))
             # Fixme: str or Element instance ?
             self._inductors.append(inductor)
         self.inductor1, self.inductor2 = self._inductors
@@ -1041,22 +1020,23 @@ class NonLinearVoltageSource(DipoleElement):
 
     ##############################################
 
-    def __init__(self, name: str, *args, **kwargs) -> None:
+    def __init__(self, name, *args, **kwargs):
+
         super().__init__(name, *args, **kwargs)
+
         self.expression = kwargs.get('expression', None)
         self.table = kwargs.get('table', None)
 
     ##############################################
 
-    def __str__(self) -> str:
+    def __str__(self):
+
         spice_element = self.format_node_names()
         # Fixme: expression
         if self.table is not None:
             # TABLE {expression} = (x0, y0) (x1, y1) ...
-            table = [f'({str_spice(x)}, {str_spice(y)})' for x, y in self.table]
+            table = ['({}, {})'.format(str_spice(x), str_spice(y)) for x, y in self.table]
             spice_element += ' TABLE {%s} = %s' % (self.expression, join_list(table))
-        elif self.raw_spice is not None:
-            spice_element += ' %s' % self.raw_spice
         return spice_element
 
 ####################################################################################################
@@ -1527,8 +1507,10 @@ class LosslessTransmissionLine(TwoPortElement):
 
     ##############################################
 
-    def __init__(self, name: str, *args, **kwargs) -> None:
+    def __init__(self, name, *args, **kwargs):
+
         super().__init__(name, *args, **kwargs)
+
         if not (self.has_parameter('time_delay') or
                 (self.has_parameter('frequency') and self.has_parameter('normalized_length'))):
             raise NameError('Either TD or F, NL must be specified')
@@ -1590,7 +1572,8 @@ class CoupledMulticonductorLine(NPinElement):
 
     ##############################################
 
-    def __init__(self, netlist: 'Netlist', name: str, *nodes, **parameters) -> None:
+    def __init__(self, netlist, name, *nodes, **parameters):
+
         super().__init__(netlist, name, nodes, **parameters)
 
 ####################################################################################################
@@ -1668,7 +1651,7 @@ class SingleLossyTransmissionLine(TwoPortElement):
 
 class XSpiceElement(NPinElement):
 
-    """This class implements a XSpice element.
+    """This class implements a sub-circuit.
 
     Spice syntax:
 
@@ -1694,7 +1677,6 @@ class XSpiceElement(NPinElement):
     .. note:: As opposite to Spice, the model is specified before the nodes so as to act as `*args`.
 
     .. warning:: Partially implemented.
-
     """
 
     ALIAS = 'A'
@@ -1704,8 +1686,10 @@ class XSpiceElement(NPinElement):
 
     ##############################################
 
-    def __init__(self, netlist: 'Netlist', name: str, *nodes, **parameters) -> None:
+    def __init__(self, netlist, name, *nodes, **parameters):
+
         # Fixme: ok ???
+
         super().__init__(netlist, name, nodes, **parameters)
 
 ####################################################################################################
@@ -1726,5 +1710,6 @@ class GSSElement(NPinElement):
 
     ##############################################
 
-    def __init__(self) -> None:
+    def __init__(self):
+
         raise NotImplementedError

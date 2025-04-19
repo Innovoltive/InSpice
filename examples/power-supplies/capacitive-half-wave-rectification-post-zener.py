@@ -19,7 +19,9 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -51,9 +53,8 @@ circuit.R('load', 'out', circuit.gnd, 1@u_kΩ)
 # print circuit.nodes
 
 # Simulator(circuit, ...).transient(...)
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-analysis = simulation.transient(step_time=ac_line.period/200, end_time=ac_line.period*10)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=ac_line.period/200, end_time=ac_line.period*10)
 
 figure, ax = plt.subplots(figsize=(20, 10))
 

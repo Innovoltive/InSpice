@@ -13,7 +13,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################

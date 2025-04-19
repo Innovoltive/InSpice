@@ -33,8 +33,10 @@ logger = Logging.setup_logging()
 ####################################################################################################
 
 from InSpice.Doc.ExampleTools import find_libraries
-from InSpice import SpiceLibrary, SubCircuitFactory, Simulator, plot
-from InSpice.Spice.Parser import SpiceFile, Translator
+from InSpice.Probe.Plot import plot
+from InSpice.Spice.Library import SpiceLibrary
+from InSpice.Spice.Netlist import SubCircuitFactory
+from InSpice.Spice.Parser import SpiceParser
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -117,10 +119,10 @@ class JackOut(SubCircuitFactory):
 #r# We read the generated netlist.
 directory_path = Path(__file__).resolve().parent
 kicad_netlist_path = directory_path.joinpath('kicad-InSpice-example', 'kicad-InSpice-example.cir')
-spice_file = SpiceFile(str(kicad_netlist_path))
+parser = SpiceParser(path=str(kicad_netlist_path))
 
 #r# We build the circuit and translate the ground (5 to 0).
-circuit = Translator.Builder().translate(spice_file, ground=5)
+circuit = parser.build_circuit(ground=5)
 
 #r# We include the operational amplifier module.
 circuit.include(spice_library['LMV981'])
@@ -132,10 +134,8 @@ for subcircuit in (PowerIn(), Opamp(), JackIn(), JackOut()):
 # print(str(circuit))
 
 #r# We perform a transient simulation.
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-# print(str(simulation))
-analysis = simulation.transient(step_time=100@u_us, end_time=3@u_ms)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
+analysis = simulator.transient(step_time=100@u_us, end_time=3@u_ms)
 
 figure, ax = plt.subplots(figsize=(20, 10))
 ax.plot(analysis['2']) # JackIn input

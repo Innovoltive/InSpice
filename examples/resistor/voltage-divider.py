@@ -7,7 +7,7 @@ logger = Logging.setup_logging()
 
 ####################################################################################################
 
-from InSpice import Circuit, Simulator
+from InSpice.Spice.Netlist import Circuit
 from InSpice.Unit import *
 
 ####################################################################################################
@@ -22,16 +22,15 @@ circuit.R(2, 'out', circuit.gnd, 1@u_kΩ)
 
 ####################################################################################################
 
-simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+simulator = circuit.simulator(temperature=25, nominal_temperature=25)
 
-analysis = simulation.operating_point()
+analysis = simulator.operating_point()
 for node in (analysis['in'], analysis.out): # .in is invalid !
     print('Node {}: {} V'.format(str(node), float(node)))
 #o#
 
 # Fixme: Xyce sensitivity analysis
-analysis = simulation.dc_sensitivity('v(out)')
+analysis = simulator.dc_sensitivity('v(out)')
 for element in analysis.elements.values():
     print(element, float(element))
 #o#

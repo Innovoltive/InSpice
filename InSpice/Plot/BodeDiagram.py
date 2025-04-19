@@ -2,21 +2,19 @@
 #
 # InSpice - A Spice Package for Python
 # Copyright (C) 2014 Fabrice Salvaire
-# Copyright (C) 2025 Innovoltive
-# Modified by Innovoltive on April 18, 2025
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
+# it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ####################################################################################################
 
@@ -35,7 +33,7 @@ from matplotlib import pyplot
 
 def bode_diagram_gain(axe, frequency, gain, **kwargs):
 
-    axe.semilogx(frequency, gain, base=10, **kwargs)
+    axe.semilogx(frequency, gain, basex=10, **kwargs)
     axe.grid(True)
     axe.grid(True, which='minor')
     axe.set_xlabel("Frequency [Hz]")
@@ -45,7 +43,7 @@ def bode_diagram_gain(axe, frequency, gain, **kwargs):
 
 def bode_diagram_phase(axe, frequency, phase, **kwargs):
 
-    axe.semilogx(frequency, phase, base=10, **kwargs)
+    axe.semilogx(frequency, phase, basex=10, **kwargs)
     axe.set_ylim(-math.pi, math.pi)
     axe.grid(True)
     axe.grid(True, which='minor')
