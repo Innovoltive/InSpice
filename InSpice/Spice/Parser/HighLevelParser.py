@@ -329,14 +329,15 @@ class Element(Command):
             elements[letter.lower()] = element_data
         # data = ElementData.elements[self._letter]
         data = elements[self._letter]
+        number_of_positional_parameters = None
+        migh_have_dict_parameters = True
         if not data.has_variable_number_of_pins:
-            if not data.multi_devices:
-                number_of_pins = data.number_of_pins
+            if data.multi_devices and not is_linear_element(ast):  # maybe redundant but  okay for now. 
+                number_of_pins = len(data.classes[1].PINS)  # Nonlinear E, G, H, F, etc
+                number_of_positional_parameters = data.classes[1].number_of_positional_parameters
+                migh_have_dict_parameters = False
             else:
-                if is_linear_element(ast):
-                    number_of_pins = data.number_of_pins
-                else:
-                    number_of_pins = len(data.classes[1].PINS)
+                number_of_pins = data.number_of_pins
         else:   # Q or X
             if first_set_position == -1:
                 number_of_pins = len(ast)
@@ -355,6 +356,7 @@ class Element(Command):
 
         self._parameters = []
         self._dict_parameters = {}
+
         for child in ast[number_of_pins:]:
             match child:
                 case Ast.Id():
@@ -364,15 +366,21 @@ class Element(Command):
                 # case Ast.Number():
                 #     self._parameters.append(child)
                 case Ast.Set():
-                    self._dict_parameters[child.left_id] = child
+                    if migh_have_dict_parameters:
+                        self._dict_parameters[child.left_id] = child
+                    else:
+                        self._parameters.append(child)    # in the case of Table (expression) = {...}
                 case _:
                     self._parameters.append(child)
                     # raise ValueError(f"Invalid item {child} in {ast}")
 
         # Fixme: ok ???
+        # in the case of nonlinear element with multiple devices the self._parameters are not equal to the number of positional parameters
         if data.multi_devices:
+            if number_of_positional_parameters is None:
+                number_of_positional_parameters = len(self._parameters)
             for element_class in data:
-                if len(self._parameters) == element_class.number_of_positional_parameters:
+                if number_of_positional_parameters == element_class.number_of_positional_parameters:
                     break
         else:
             element_class = data.single

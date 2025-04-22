@@ -188,7 +188,7 @@ class SpiceParser:
     t_LEFT_BRACE = r'\{'
     t_RIGHT_BRACE = r'\}'
 
-    t_QUOTE = r'[\'"]'
+    t_QUOTE = r'[\'"’]'
     t_SET = r'='
 
     t_BRANCH = r'\#branch'
