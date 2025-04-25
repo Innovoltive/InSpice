@@ -28,6 +28,7 @@ setup(
         "cffi>=1.0.0",
         "diskcache",
         "h5py",
+        "ply",
     ],
     extras_require={
         "dev": ["pytest", "twine", "build"],
