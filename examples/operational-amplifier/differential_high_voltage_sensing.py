@@ -27,6 +27,7 @@ spice_library = SpiceLibrary(libraries_path)
 circuit = Circuit('Operational Amplifier')
 circuit.include(spice_library['ADA4940'])
 circuit.include(spice_library['LMH6551'])
+circuit.include(spice_library['ad8137'])
 
 gain = 80e3/10e6
 rh_val = 10e3@u_kΩ
@@ -43,13 +44,19 @@ circuit.C('V+', 'V+', circuit.gnd, 0.1@u_uF)
 circuit.SinusoidalVoltageSource('inputh', 'inh', circuit.gnd, offset = input_offset, amplitude=input_amplitude, frequency=1@u_kHz)
 circuit.V('inputl', 'inl', circuit.gnd, dc_value=0@u_V)
 
-use_ada4940 = True
-if use_ada4940:
+ic = 'ad8137'
+# ic = 'ada4940'
+# ic = 'LMH6551'
+if ic == 'ad8137':
+    circuit.X('op', 'ad8137', 'in+', 'in-', 'V+', 'V-', 'out+', 'out-', 'Vcm')
+elif ic == 'ada4940':
     circuit.X('op', 'ADA4940', 'FB-', 'FB+', 'in+', 'in-', 'V+', 'V-','out+', 'out-', 'Vcm')
-else:
+elif ic == 'LMH6551':
     # Note that the LMH6551 needs a Vcm voltage to work properly. This is the common mode voltage.
     circuit.X('op', 'LMH6551', 'in+', 'in-', 'V+', 'V-', 'Vcm', 'out+', 'out-')
     circuit.V('Vcm', 'Vcm', circuit.gnd, dc_value=vdd_voltage@u_V)
+else:
+    raise ValueError('Unknown IC: {}'.format(ic))
 
 circuit.R('inph', 'inh',   'in+', rh_val)
 circuit.R('innh', 'inl',   'in-', rh_val)
@@ -61,8 +68,8 @@ circuit.R('inpl', 'in-', 'out+', gain*rh_val)
 circuit.R('out+', 'out+', 'outp', 56@u_Ω)
 circuit.R('out-', 'out-', 'outn', 56@u_Ω)
 # place 39pf from outp and outn to ground
-circuit.C('outp', 'outp', circuit.gnd, 39@u_pF)
-circuit.C('outn', 'outn', circuit.gnd, 39@u_pF)
+# circuit.C('outp', 'outp', circuit.gnd, 390@u_pF)
+# circuit.C('outn', 'outn', circuit.gnd, 390@u_pF)
 
 circuit.R('load', 'outp', 'outn', 470@u_Ω)
 # place a 0.22uF capacitor from Vcm to ground
