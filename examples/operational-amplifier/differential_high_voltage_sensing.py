@@ -26,6 +26,7 @@ spice_library = SpiceLibrary(libraries_path)
 
 circuit = Circuit('Operational Amplifier')
 circuit.include(spice_library['ADA4940'])
+circuit.include(spice_library['genopadiff'])
 circuit.include(spice_library['LMH6551'])
 circuit.include(spice_library['ad8137'])
 
@@ -44,11 +45,15 @@ circuit.C('V+', 'V+', circuit.gnd, 0.1@u_uF)
 circuit.SinusoidalVoltageSource('inputh', 'inh', circuit.gnd, offset = input_offset, amplitude=input_amplitude, frequency=1@u_kHz)
 circuit.V('inputl', 'inl', circuit.gnd, dc_value=0@u_V)
 
-ic = 'ad8137'
+# ic = 'ad8137'
+ic = 'genopadiff'
 # ic = 'ada4940'
 # ic = 'LMH6551'
 if ic == 'ad8137':
     circuit.X('op', 'ad8137', 'in+', 'in-', 'V+', 'V-', 'out+', 'out-', 'Vcm')
+elif ic == 'genopadiff':
+    circuit.X('op', 'genopadiff', 'in+', 'in-', 'V+', 'V-', 'out+', 'out-', 'Vcm')
+
 elif ic == 'ada4940':
     circuit.X('op', 'ADA4940', 'FB-', 'FB+', 'in+', 'in-', 'V+', 'V-','out+', 'out-', 'Vcm')
 elif ic == 'LMH6551':
