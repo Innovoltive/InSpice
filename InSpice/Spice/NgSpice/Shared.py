@@ -180,6 +180,10 @@ class Vector:
     def is_voltage_node(self):
         return self._type == self._ngspice_shared.simulation_type.voltage and not self.is_interval_parameter
 
+
+    @property
+    def is_node_current(self):
+        return self._type == self._ngspice_shared.simulation_type.current and self.is_interval_parameter
     ##############################################
 
     @property
@@ -244,6 +248,11 @@ class Plot(dict):
         return [variable.to_waveform(abscissa, to_float=to_float)
                 for variable in self.values()
                 if variable.is_voltage_node]
+
+    def node_currents(self, to_float=False, abscissa=None):
+        return [variable.to_waveform(abscissa, to_float=to_float)
+                for variable in self.values()
+                if variable.is_node_current]
 
     ##############################################
 
@@ -348,6 +357,7 @@ class Plot(dict):
             time=time,
             nodes=self.nodes(abscissa=time),
             branches=self.branches(abscissa=time),
+            node_currents=self.node_currents(abscissa=time),
             internal_parameters=self.internal_parameters(abscissa=time),
         )
 

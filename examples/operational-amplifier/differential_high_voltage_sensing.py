@@ -1,5 +1,7 @@
 '''This example shows how to use a single ended to differential amplifier to sense a high voltage
-and convert it to a low voltage. The circuit is based on the ADA4940 operational amplifier.'''
+and convert it to a low voltage. The circuit is based on the ADA4940 operational amplifier.
+You can see how using AD8137 causes instability in the circuit. The circuit is a simple
+'''
 ####################################################################################################
 
 import numpy as np
