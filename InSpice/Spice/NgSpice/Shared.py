@@ -436,7 +436,7 @@ class NgSpiceShared:
 
             elif ConfigInstall.OS.on_osx:
                 path = 'libngspice{}.dylib'
-            elif ConfigInstall.OS.on_linux:
+            elif ConfigInstall.OS.on_linux or ConfigInstall.OS.on_web:
                 path = 'libngspice{}.so'
             else:
                 raise NotImplementedError
