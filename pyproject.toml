@@ -31,6 +31,7 @@ dependencies = [
     "cffi>=1.0.0",
     "diskcache",
     "h5py",
+    "ply",
 ]
 
 [project.urls]
