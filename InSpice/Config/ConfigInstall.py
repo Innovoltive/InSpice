@@ -21,6 +21,11 @@ class OsFactory:
             self._name = 'windows'
         elif sys.platform.startswith('darwin'):
             self._name = 'osx'
+        elif sys.platform == 'emscripten':
+            self._name = 'web'
+        else:
+            raise NotImplementedError("Platform not supported")
+
 
     ##############################################
 
@@ -39,6 +44,10 @@ class OsFactory:
     @property
     def on_osx(self):
         return self._name == 'osx'
+
+    @property
+    def on_web(self):
+        return self._name == 'web'
 
 OS = OsFactory()
 
