@@ -449,6 +449,9 @@ class NgSpiceShared:
         # name must not be prefixed by lib !
         if name.startswith('lib'):
             name = name[3:]
+        # name must not be suffixed by .so, .dll or .dylib
+        if "." in name:
+            name = name.split('.')[0]
         cls._logger.debug(f'Search library "{name}"')
         return ctypes.util.find_library(name)
 
