@@ -461,6 +461,8 @@ class NgSpiceShared:
         # name must not be prefixed by lib !
         if name.startswith('lib'):
             name = name[3:]
+        if ".so" in name or ".dll" in name or ".dylib" in name:
+            name = name.split('.')[0]
         cls._logger.debug(f'Search library "{name}"')
         return ctypes.util.find_library(name)
     ##############################################
@@ -557,9 +559,6 @@ class NgSpiceShared:
         api_path = Path(__file__).parent.joinpath('api.h')
         with open(api_path, encoding='utf8') as fh:
             ffi.cdef(fh.read())
-        if self.library_path is None:
-            self._logger.debug('NgSpice library path is not set')
-            raise NameError('NgSpice library path is not set')
         message = f'Load library {self.library_path}'
         self._logger.debug(message)
         if verbose:
