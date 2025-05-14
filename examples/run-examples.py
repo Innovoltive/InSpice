@@ -34,7 +34,7 @@ import sys
 
 ####################################################################################################
 
-def run_example(file_name, no_gui=False):
+def run_example(file_name, no_gui=True):
     """Run a single example file with proper error handling."""
     print(f"Running {file_name}{' (GUI and plots suppressed)' if no_gui else ''}")
     
