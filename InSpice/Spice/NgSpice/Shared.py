@@ -448,6 +448,8 @@ class NgSpiceShared:
                 path = 'libngspice{}.dylib'
             elif ConfigInstall.OS.on_linux:
                 path = 'libngspice{}.so'
+            elif ConfigInstall.OS.on_web:
+                path = 'libngspice{}.so'                
             else:
                 raise NotImplementedError
             cls.LIBRARY_PATH = str(path)
@@ -459,21 +461,8 @@ class NgSpiceShared:
         # name must not be prefixed by lib !
         if name.startswith('lib'):
             name = name[3:]
-        # Check if NGSPICE_LIBRARY_PATH is set, if so use it directly
-        direct_path = os.environ.get('NGSPICE_LIBRARY_PATH', None)
-        if direct_path and os.path.exists(direct_path):
-            cls._logger.debug(f'Using directly specified path: {direct_path}')
-            return direct_path
-        # Otherwise use standard library search path
-        lib_path = ctypes.util.find_library(name)
-        # If still not found, try common locations
-        if not lib_path:
-            for path in ['/usr/local/lib/libngspice.so', '/usr/lib/libngspice.so', '/usr/lib/x86_64-linux-gnu/libngspice.so']:
-                if os.path.exists(path):
-                    cls._logger.debug(f'Found ngspice library at {path}')
-                    return path
-        return lib_path
-
+        cls._logger.debug(f'Search library "{name}"')
+        return ctypes.util.find_library(name)
     ##############################################
 
     _instances = {}
@@ -568,7 +557,9 @@ class NgSpiceShared:
         api_path = Path(__file__).parent.joinpath('api.h')
         with open(api_path, encoding='utf8') as fh:
             ffi.cdef(fh.read())
-
+        if self.library_path is None:
+            self._logger.debug('NgSpice library path is not set')
+            raise NameError('NgSpice library path is not set')
         message = f'Load library {self.library_path}'
         self._logger.debug(message)
         if verbose:
