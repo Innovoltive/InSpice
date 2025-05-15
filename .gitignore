@@ -184,3 +184,4 @@ examples/spice-library/**/**/*.yaml
 examples/spice-library/**/*.yaml
 
 *.egg-info/
+publish.sh
