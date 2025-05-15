@@ -438,6 +438,8 @@ class NgSpiceShared:
                 path = 'libngspice{}.dylib'
             elif ConfigInstall.OS.on_linux:
                 path = 'libngspice{}.so'
+            elif ConfigInstall.OS.on_web:
+                path = 'libngspice{}.so'
             else:
                 raise NotImplementedError
             cls.LIBRARY_PATH = str(path)
@@ -449,6 +451,8 @@ class NgSpiceShared:
         # name must not be prefixed by lib !
         if name.startswith('lib'):
             name = name[3:]
+        if '.so' in name or '.dll' in name or '.dylib' in name:
+            name = name.split('.')[0]
         cls._logger.debug(f'Search library "{name}"')
         return ctypes.util.find_library(name)
 
