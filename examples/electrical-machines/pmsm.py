@@ -1,0 +1,75 @@
+####################################################################################################
+
+import matplotlib.pyplot as plt
+
+####################################################################################################
+
+import InSpice.Logging.Logging as Logging
+logger = Logging.setup_logging()
+
+####################################################################################################
+
+from InSpice.Doc.ExampleTools import find_libraries
+from InSpice import SpiceLibrary, Circuit, Simulator, plot
+from InSpice.Unit import *
+####################################################################################################
+
+libraries_path = find_libraries()
+spice_library = SpiceLibrary(libraries_path)
+
+
+####################################################################################################
+circuit = Circuit("PMSM Example")
+circuit.include(spice_library['PMSM'])  # Include the PMSM library
+# create phase A, B, C with 120-degree phase shift
+FLINE = 100@u_Hz
+TLINE = FLINE.period
+AMPLITUDE = 100@u_V
+
+# Three-phase voltage sources with proper phase relationships
+#TODO: implement phase in the voltage source
+vas=circuit.SinusoidalVoltageSource('vas', 'phase_a', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=0@u_s)
+vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=TLINE/3)
+vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=2*TLINE/3)
+
+circuit.R('as', 'phase_a', 'pha', 11@u_mOhm) # to measure current in phase and model cable resistance
+circuit.R('bs', 'phase_b', 'phb', 12@u_mOhm) # to measure current in phase and model cable resistance
+circuit.R('cs', 'phase_c', 'phc', 13@u_mOhm) # to measure current in phase and model cable resistance
+
+# Add PMSM subcircuit                        
+circuit.X('M', 'PMSM', 'pha', 'phb', 'phc')
+# Add load resistors to complete the circuit and prevent floating nodes
+
+
+simulator = Simulator.factory()
+simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
+simulation.options('RSHUNT = 1e12') # helps with convergence in some cases
+simulation.options('SAVECURRENTS') # save all the currents in the simulation
+analysis = simulation.transient(step_time=10@u_us, end_time=100@u_ms)
+
+figure1, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+
+ax1.set_title('Three-Phase PMSM Voltage Sources')
+ax1.set_ylabel('Voltage [V]')
+ax1.grid()
+ax1.plot(analysis['phase_a'], label='Phase A')
+ax1.plot(analysis['phase_b'], label='Phase B')
+ax1.plot(analysis['phase_c'], label='Phase C')
+ax1.legend()
+
+ax2.set_title('Three-Phase PMSM Currents')
+ax2.set_xlabel('Time [s]')
+ax2.set_ylabel('Current [A]')
+ax2.grid()
+ax2.plot(analysis['xm.alpha'], label='valpha', color='C0')
+ax2.plot(analysis['xm.beta'], label='vbeta', color='C1')
+ax2.plot(analysis['xm.q'], label='vq', color='C2')
+ax2.plot(analysis['xm.d'], label='vd', color='C3')
+# ax2.plot(analysis['@ras[i]'], label='Current Phase A')
+# ax2.plot(analysis['@rbs[i]'], label='Current Phase B')
+# ax2.plot(analysis['@rcs[i]'], label='Current Phase C')
+ax2.legend()
+
+plt.tight_layout()
+plt.show()
+

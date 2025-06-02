@@ -1,0 +1,69 @@
+* this code implements a permanent magnet synchronous machine (PMSM) model
+* with a sinusoidal back EMF and a simple voltage control
+
+
+.subckt PMSM as bs cs n ras=0.01 rbs=0.01 rcs=0.01 las=0.001 lbs=0.001 lcs=0.001 poles=2
+
+.param Lq={Las}
+.param Ld={Las}
+
+* back EMF parameters
+.param lambda_m=0.1 
+
+
+gas as n value={0}
+gbs bs n value={0}
+gcs cs n value={0}
+
+xclark as bs cs alpha beta clark
+xpark alpha beta theta q d park
+eq qs 0 value={v(q)}
+ed ds 0 value={v(d)}
+
+
+rqs qs  qs1 {ras}
+lqs qs1 qs2 {Lq}
+eqs qs2 qs3 value={Ld*v(we)*i(eqs)}
+eemf q3 0 value={lambda_m*v(we)}
+
+rds ds  ds1 {ras}
+lds ds1 ds2 {Ld}
+eds ds2 ds3 value={-Lq*v(we)*i(eds)}
+
+Elambda_qs lambda_qs 0 value={Lq*i(eqs)}
+Elambda_ds lambda_ds 0 value={Ld*i(eds) + lambda_m}
+
+*TODO: need to be calculated from laplas
+* wm = Te-Tl /(J*s + Bm)
+Ewm wm 0 value={50}
+Erpm rpm 0 value={v(wm)*60/2/3.14}
+Ewe we 0 value={poles/2*v(wm)}
+
+
+* Toque calculation
+* Torque equation: Te = 3/2 * poles/2 * (v(lambda_ds)*i(eqs) - v(lambda_qs)*i(eds))
+Ete te 0 value={3/2 * poles/2 * (v(lambda_ds)*i(eqs) - v(lambda_qs)*i(eds))}
+
+* a temporary soltuion for theta, which is the angle of the rotor
+.param fline=100Hz
+Vtheta theta 0 DC 0V PWL(0s 0V {1/fline} {2*3.14} {1/fline} 0V r=0s)
+
+
+.ends PMSM
+
+
+
+************* Clark and Park transformations for PMSM
+.subckt clark a b c alpha beta
+elpha alpha 0 value={v(a)}
+ebeta beta  0 value={1/sqrt(3)*(v(a)+2*v(b))}
+.ends clark
+
+.subckt park alpha beta theta q d
+Ecosth costh 0 value = {cos(v(theta))}
+Esinth sinth 0 value = {sin(v(theta))}
+
+* we build Valpha and Vbeta from the vqs and vds references and theta
+Ealpha q 0 value = {v(costh)*v(alpha) + v(sinth)*v(beta)}
+Ebeta  d  0 value = {v(sinth)*v(alpha) - v(costh)*v(beta)}  
+.ends park
