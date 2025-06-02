@@ -27,10 +27,10 @@ TLINE = FLINE.period
 AMPLITUDE = 100@u_V
 
 # Three-phase voltage sources with proper phase relationships
-#TODO: implement phase in the voltage source
-vas=circuit.SinusoidalVoltageSource('vas', 'phase_a', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=0@u_s)
-vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=TLINE/3)
-vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=2*TLINE/3)
+#TODO: implement phase in the voltage source. we make cosine to match my course. we add an offset to the delay to match the cosine wave
+vas=circuit.SinusoidalVoltageSource('vas', 'phase_a', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=-5*TLINE/4)
+vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=   TLINE/3 - 5*TLINE/4)
+vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay= 2*TLINE/3 - 5*TLINE/4)
 
 circuit.R('as', 'phase_a', 'pha', 11@u_mOhm) # to measure current in phase and model cable resistance
 circuit.R('bs', 'phase_b', 'phb', 12@u_mOhm) # to measure current in phase and model cable resistance
@@ -47,7 +47,7 @@ simulation.options('RSHUNT = 1e12') # helps with convergence in some cases
 simulation.options('SAVECURRENTS') # save all the currents in the simulation
 analysis = simulation.transient(step_time=10@u_us, end_time=100@u_ms)
 
-figure1, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8), sharex=True)
+figure1, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(10, 8), sharex=True)
 
 ax1.set_title('Three-Phase PMSM Voltage Sources')
 ax1.set_ylabel('Voltage [V]')
@@ -70,6 +70,20 @@ ax2.plot(analysis['xm.d'], label='vd', color='C3')
 # ax2.plot(analysis['@rcs[i]'], label='Current Phase C')
 ax2.legend()
 
+ax3.set_title('PMSM Mechanical Parameters')
+ax3.set_xlabel('Time [s]')
+ax3.set_ylabel('Mechanical Parameters')
+ax3.grid()
+ax3.plot(analysis['xm.wm'], label='Angular Velocity [rad/s]', color='C0')
+ax3.plot(analysis['xm.we'], label='Electrical Angular Velocity [rad/s]', color='C1')
+ax3.legend()
+
+ax4.set_title('PMSM Electrical Parameters')
+ax4.set_xlabel('Time [s]')
+ax4.set_ylabel('Electrical Parameters')
+ax4.grid()
+ax4.plot(analysis['xm.theta'], label='Electrical Angle [rad]', color='C0')
+ax4.plot(analysis['xm.te'], label='Te, Torque [Nm]', color='C1')
 plt.tight_layout()
 plt.show()
 
