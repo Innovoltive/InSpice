@@ -37,10 +37,12 @@ circuit.X('park', 'park', 'qs_ref', 'ds_ref', 'theta', 'alpha_ref', 'beta_ref')
 # Xiclark alpha_ref beta_ref asd bsd csd iclark
 circuit.X('iclark', 'iclark', 'alpha_ref', 'beta_ref', 'asd', 'bsd', 'csd')
 
-circuit.NonLinearVoltageSource('as', 'phase_a', circuit.gnd, raw_spice='value={v(asd)}')  
-circuit.NonLinearVoltageSource('bs', 'phase_b', circuit.gnd, raw_spice='value={v(bsd)}')  
-circuit.NonLinearVoltageSource('cs', 'phase_c', circuit.gnd, raw_spice='value={v(csd)}')  
-
+neutral = 'n'
+circuit.NonLinearVoltageSource('as', 'phase_a', neutral, raw_spice='value={v(asd)}')  
+circuit.NonLinearVoltageSource('bs', 'phase_b', neutral, raw_spice='value={v(bsd)}')  
+circuit.NonLinearVoltageSource('cs', 'phase_c', neutral, raw_spice='value={v(csd)}')  
+circuit.R('n', neutral, circuit.gnd, 1@u_GOhm)  # Neutral resistor to ground
+circuit.C('n', neutral, circuit.gnd, 1@u_nF)  # Neutral capacitor to ground
 # Behavioral voltage source for mechanical angle and speed
 # Three-phase voltage sources with proper phase relationships
 # #TODO: implement phase in the voltage source. we make cosine to match my course. we add an offset to the delay to match the cosine wave
@@ -48,20 +50,23 @@ circuit.NonLinearVoltageSource('cs', 'phase_c', circuit.gnd, raw_spice='value={v
 # vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=   TLINE/3 - 5*TLINE/4)
 # vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay= 2*TLINE/3 - 5*TLINE/4)
 
-circuit.R('as', 'phase_a', 'pha', 11@u_mOhm) # to measure current in phase and model cable resistance
-circuit.R('bs', 'phase_b', 'phb', 12@u_mOhm) # to measure current in phase and model cable resistance
-circuit.R('cs', 'phase_c', 'phc', 13@u_mOhm) # to measure current in phase and model cable resistance
+circuit.R('as', 'phase_a', 'pha', 1@u_mOhm) # to measure current in phase and model cable resistance
+circuit.R('bs', 'phase_b', 'phb', 1@u_mOhm) # to measure current in phase and model cable resistance
+circuit.R('cs', 'phase_c', 'phc', 1@u_mOhm) # to measure current in phase and model cable resistance
 
 # Add PMSM subcircuit                        
-circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm')
+#+rs=3.4 ls=12.1e-3 poles=4 
+# +lambda_m=0.0827 Tl=0 J=5e-4 Bm=1e-9
+circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm', TL=0.4)
 # Add load resistors to complete the circuit and prevent floating nodes
 
 
 simulator = Simulator.factory()
-simulation = simulator.simulation(circuit, temperature=25, nominal_temperature=25)
-simulation.options('RSHUNT = 1e12') # helps with convergence in some cases
+simulation = simulator.simulation(circuit)
+# simulation.options('RSHUNT = 1e12') # helps with convergence in some cases
 simulation.options('SAVECURRENTS') # save all the currents in the simulation
-analysis = simulation.transient(step_time=10@u_us, end_time=200@u_ms)
+# simulation.options('NOINIT')
+analysis = simulation.transient(step_time=0.1@u_ms, end_time=2@u_s)
 
 figure1, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(10, 8), sharex=True)
 
@@ -73,14 +78,14 @@ ax1.plot(analysis['phase_b'], label='Phase B')
 ax1.plot(analysis['phase_c'], label='Phase C')
 ax1.legend()
 
-# ax2.set_title('Three-Phase PMSM Currents')
-# ax2.set_xlabel('Time [s]')
-# ax2.set_ylabel('Current [A]')
-# ax2.grid()
-# ax2.plot(analysis['@ras[i]'], label='Current Phase A')
-# ax2.plot(analysis['@rbs[i]'], label='Current Phase B')
-# ax2.plot(analysis['@rcs[i]'], label='Current Phase C')
-# ax2.legend()
+ax2.set_title('Three-Phase PMSM Currents')
+ax2.set_xlabel('Time [s]')
+ax2.set_ylabel('Current [A]')
+ax2.grid()
+ax2.plot(analysis['@ras[i]'], label='Current Phase A')
+ax2.plot(analysis['@rbs[i]'], label='Current Phase B')
+ax2.plot(analysis['@rcs[i]'], label='Current Phase C')
+ax2.legend()
 
 ax3.set_title('PMSM Mechanical Parameters')
 ax3.set_xlabel('Time [s]')
@@ -102,10 +107,10 @@ ax4.set_xlabel('Time [s]')
 ax4.set_ylabel('Electrical Parameters')
 ax4.grid()
 # ax4.plot(analysis['xm.q3'], label='back EMF q-axis [V]', color='C0')
-ax4.plot(analysis['xm.iqs'], label='iqs current [A]', color='C1')
-ax4.plot(analysis['xm.ids'], label='ids current [A]', color='C2')
-# ax4.plot(analysis['xm.te'], label='Torque [Nm]', color='C0')
-# ax4.plot(analysis['xm.tl'], label='Load Torque [Nm]', color='C1')
+# ax4.plot(analysis['xm.iqs'], label='iqs current [A]', color='C1')
+# ax4.plot(analysis['xm.ids'], label='ids current [A]', color='C2')
+ax4.plot(analysis['xm.te'], label='Torque [Nm]', color='C0')
+ax4.plot(analysis['xm.tl'], label='Load Torque [Nm]', color='C1')
 ax4.legend()
 plt.tight_layout()
 plt.show()

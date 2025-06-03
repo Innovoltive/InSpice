@@ -1,7 +1,7 @@
 * this uses the pmsm.lib. test how to use the .lib file
 .title PMSM model with sinusoidal back EMF
-.include "../spice-library/electrical-machines/clark_park.lib"
-.include "../spice-library/electrical-machines/pmsm.lib"
+.include "../../spice-library/electrical-machines/clark_park.lib"
+.include "../../spice-library/electrical-machines/pmsm.lib"
 
 **input parameters
 .param rs=3.4 
@@ -34,7 +34,7 @@ Xm as bs cs theta rpm pmsm rs={rs} ls={ls}
 *options rshunt=1e12
 *options noinit
 *options klu
-tran 0.1ms 2s
+tran 0.1ms 2s 0s
 plot qs_ref ds_ref
 plot v(as) v(bs) v(cs)
 plot i(vas) i(vbs) i(vcs)
