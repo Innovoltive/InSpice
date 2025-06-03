@@ -18,9 +18,11 @@
 vqs_ref qs_ref 0 DC 0V PWL(0s 0V 1ms {11.25*sqrt(2)})
 vds_ref ds_ref 0 0
 Xpark   qs_ref ds_ref theta alpha_ref beta_ref park
-Eas as as_n value={v(alpha_ref)}
-Ebs bs bs_n value={-1/2*v(alpha_ref) + sqrt(3)/2*v(beta_ref)}
-Ecs cs cs_n value={-1/2*v(alpha_ref) - sqrt(3)/2*v(beta_ref)} 
+* use reverse park transformation to get the reference voltages
+Xiclark alpha_ref beta_ref asd bsd csd iclark
+Eas as as_n value={v(asd)}
+Ebs bs bs_n value={v(bsd)}
+Ecs cs cs_n value={v(csd)}
 Vas n as_n DC 0V
 Vbs n bs_n DC 0V
 Vcs n cs_n DC 0V
