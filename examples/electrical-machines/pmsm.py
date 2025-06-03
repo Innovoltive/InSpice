@@ -1,5 +1,6 @@
 ####################################################################################################
 
+import math
 import matplotlib.pyplot as plt
 
 ####################################################################################################
@@ -20,24 +21,39 @@ spice_library = SpiceLibrary(libraries_path)
 
 ####################################################################################################
 circuit = Circuit("PMSM Example")
-circuit.include(spice_library['PMSM'])  # Include the PMSM library
+circuit.include(spice_library['pmsm'])  # Include the PMSM library
+circuit.include(spice_library['clark'])  # Include the PMSM library
+circuit.include(spice_library['iclark'])  # Include the PMSM library
+circuit.include(spice_library['park'])  # Include the PMSM load library
 # create phase A, B, C with 120-degree phase shift
 FLINE = 100@u_Hz
 TLINE = FLINE.period
 AMPLITUDE = 100@u_V
 
+circuit.V('qs_ref', 'qs_ref', circuit.gnd, 11.2*math.sqrt(2)@u_V)  # Reference voltage for q-axis
+circuit.V('ds_ref', 'ds_ref', circuit.gnd, 0@u_V)  # Reference voltage for d-axis
+# Xpark   qs_ref ds_ref theta alpha_ref beta_ref park
+circuit.X('park', 'park', 'qs_ref', 'ds_ref', 'theta', 'alpha_ref', 'beta_ref')
+# Xiclark alpha_ref beta_ref asd bsd csd iclark
+circuit.X('iclark', 'iclark', 'alpha_ref', 'beta_ref', 'asd', 'bsd', 'csd')
+
+circuit.NonLinearVoltageSource('as', 'phase_a', circuit.gnd, raw_spice='value={v(asd)}')  
+circuit.NonLinearVoltageSource('bs', 'phase_b', circuit.gnd, raw_spice='value={v(bsd)}')  
+circuit.NonLinearVoltageSource('cs', 'phase_c', circuit.gnd, raw_spice='value={v(csd)}')  
+
+# Behavioral voltage source for mechanical angle and speed
 # Three-phase voltage sources with proper phase relationships
-#TODO: implement phase in the voltage source. we make cosine to match my course. we add an offset to the delay to match the cosine wave
-vas=circuit.SinusoidalVoltageSource('vas', 'phase_a', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=-5*TLINE/4)
-vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=   TLINE/3 - 5*TLINE/4)
-vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay= 2*TLINE/3 - 5*TLINE/4)
+# #TODO: implement phase in the voltage source. we make cosine to match my course. we add an offset to the delay to match the cosine wave
+# vas=circuit.SinusoidalVoltageSource('vas', 'phase_a', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=-5*TLINE/4)
+# vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=   TLINE/3 - 5*TLINE/4)
+# vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay= 2*TLINE/3 - 5*TLINE/4)
 
 circuit.R('as', 'phase_a', 'pha', 11@u_mOhm) # to measure current in phase and model cable resistance
 circuit.R('bs', 'phase_b', 'phb', 12@u_mOhm) # to measure current in phase and model cable resistance
 circuit.R('cs', 'phase_c', 'phc', 13@u_mOhm) # to measure current in phase and model cable resistance
 
 # Add PMSM subcircuit                        
-circuit.X('M', 'PMSM', 'pha', 'phb', 'phc')
+circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm')
 # Add load resistors to complete the circuit and prevent floating nodes
 
 
@@ -72,11 +88,11 @@ ax3.set_ylabel('Mechanical Parameters')
 ax3.grid()
 # ax3.plot(analysis['xm.alpha'], label='valpha', color='C0')
 # ax3.plot(analysis['xm.beta'], label='vbeta', color='C1')
-ax3.plot(analysis['xm.qs'], label='vqs', color='C0')
-ax3.plot(analysis['xm.ds'], label='vds', color='C1')
+# ax3.plot(analysis['xm.qs'], label='vqs', color='C0')
+# ax3.plot(analysis['xm.ds'], label='vds', color='C1')
 # ax3.plot(analysis['xm.wm'], label='Mechanical Angular Velocity [rad/s]', color='C0')
 # ax3.plot(analysis['xm.we'], label='Electrical Angular Velocity [rad/s]', color='C1')
-# ax3.plot(analysis['xm.rpm'], label='Speed [RPM]', color='C0')
+ax3.plot(analysis['rpm'], label='Speed [RPM]', color='C0')
 # ax3.plot(analysis['xm.theta'], label='Mechanical Angle [rad]', color='C0')
 # ax3.plot(analysis['xm.theta2'], label='Electrical Angle [rad]', color='C1')
 ax3.legend()
@@ -86,8 +102,8 @@ ax4.set_xlabel('Time [s]')
 ax4.set_ylabel('Electrical Parameters')
 ax4.grid()
 # ax4.plot(analysis['xm.q3'], label='back EMF q-axis [V]', color='C0')
-# ax4.plot(analysis['xm.iqs'], label='iqs current [A]', color='C1')
-# ax4.plot(analysis['xm.ids'], label='ids current [A]', color='C2')
+ax4.plot(analysis['xm.iqs'], label='iqs current [A]', color='C1')
+ax4.plot(analysis['xm.ids'], label='ids current [A]', color='C2')
 # ax4.plot(analysis['xm.te'], label='Torque [Nm]', color='C0')
 # ax4.plot(analysis['xm.tl'], label='Load Torque [Nm]', color='C1')
 ax4.legend()
