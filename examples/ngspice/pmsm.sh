@@ -1,0 +1,114 @@
+* this code implements a permanent magnet synchronous machine (PMSM) model
+* with a sinusoidal back EMF and a simple voltage control
+.title PMSM model with sinusoidal back EMF
+.include "../spice-library/electrical-machines/clark_park.lib"
+
+**input parameters
+.param rs=3.4 
+.param ls=12.1e-3 
+.param poles=4
+.param lambda_m=0.0827
+.param Tl=0.4
+.param J=5e-4
+.param Bm=1e-9
+
+
+
+** Build the input voltage sources based on vqs_ref and vds_ref
+* this will be the outside of the motor
+vqs_ref qs_ref 0 DC 0V PWL(0s 0V 1ms {11.25*sqrt(2)})
+vds_ref ds_ref 0 0
+xparkref qs_ref ds_ref theta alpha_ref beta_ref park
+* note that the voltages are refernce to the neutral point (n)
+Eas as as_n value={v(alpha_ref)}
+Ebs bs bs_n value={-1/2*v(alpha_ref) + sqrt(3)/2*v(beta_ref)}
+Ecs cs cs_n value={-1/2*v(alpha_ref) - sqrt(3)/2*v(beta_ref)} 
+Vas nn as_n DC 0V
+Vbs nn bs_n DC 0V
+Vcs nn cs_n DC 0V
+rann nn 0 1e12
+cann nn 0 1e-9
+
+
+************ PMSM model. Inside the motor this is what hapens
+.param Lq={Ls}
+.param Ld={Ls}
+.param Rq={rs}
+.param Rd={rs}
+
+* convertering the input voltages from abc to dq references frame
+Xclark as bs cs alpha beta clark
+Xpark alpha beta theta qinit dinit park
+Eqs qs iqs_1 value={v(qinit)}
+Eds ds ids_1 value={v(dinit)}
+Viqs iqs_1 0 DC 0V
+Vids ids_1 0 DC 0V
+
+* convert currents to voltage, so we can send them to subckts
+Eiqs iqs 0 value={-i(viqs)}
+Eids ids 0 value={-i(vids)}
+
+* emulate the phase currents
+Xiab iqs ids theta ialpha ibeta park
+Gas as n value={v(ialpha)}
+Gbs bs n value={-1/2*v(ialpha) + sqrt(3)/2*v(ibeta)}
+Gcs cs n value={-1/2*v(ialpha) - sqrt(3)/2*v(ibeta)}
+can n 0 1e-9
+ran n 0 1e12 
+
+* now build the dq model of the PMSM based on my course
+Rq   qs  qs1  {Rq}
+Lq   qs1 qs2  {Lq}
+Eq   qs2 qs3  value={Ld*v(we)*v(ids)}
+Eemf qs3  0    value={lambda_m*v(we)}
+
+Rd ds  ds1 {Rd}
+Ld ds1 ds2 {Ld}
+Ed ds2 0   value={-Lq*v(we)*v(iqs)}
+
+* Flux linkage equations lambda 
+Elqs lqs 0 value={Lq*v(iqs)}
+Elds lds 0 value={Ld*v(ids) + lambda_m}
+
+* Electrical Toque calculation
+Ete te 0 value={3/2 * poles/2 * (v(lds)*v(iqs) - v(lqs)*v(ids))}
+
+
+* shaft speed (wm) calculation wm = Te-Tl /(J*s + Bm)
+etl tl 0 value={tl} 
+etetl te_tl 0 value={v(te) - v(tl)}
+awm te_tl wm wmblk
+.model wmblk s_xfer(num_coeff=[1] den_coeff=[{J} {Bm}] int_ic=[0])
+Erpm rpm 0 value={v(wm)*60/2/3.14}
+
+* electrical speed calculation
+Ewe we 0 value={poles/2*v(wm)}
+
+* a temporary soltuion for theta, which is the angle of the rotor
+* once you calculat theta based on we you can remove this
+*.param fline=5
+*Vtheta theta 0 DC 0V PWL(0s 0V {1/fline} {2*3.14} {1/fline} 0V r=0s)
+*TODO: need to make a roll-over integration blcok for theta
+Atheta we theta thblk
+.model thblk int(in_offset=0.0 gain=1.0
++ out_lower_limit=-1e12 out_upper_limit=1e12
++ limit_range=1e-9 out_ic=0.0)
+
+
+.control
+*options rshunt=1e12
+*options noinit
+*options klu
+tran 0.1ms 2s
+*plot v(qs_ref) v(ds_ref)
+plot v(as) v(bs) v(cs)
+plot v(theta)
+*plot v(qs) v(ds)
+*plot v(iqs) v(ids)
+*plot v(lqs) v(lds)
+*plot v(te)
+*plot v(te_tl)
+*plot v(wm)
+plot v(rpm)
+.endc
+

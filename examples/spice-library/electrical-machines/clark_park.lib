@@ -1,0 +1,15 @@
+
+************* Clark and Park transformations for PMSM
+.subckt clark a b c alpha beta
+elpha alpha 0 value={v(a)}
+ebeta beta  0 value={1/sqrt(3)*(v(a)+2*v(b))}
+.ends clark
+
+.subckt park alpha beta theta q d
+Ecosth costh 0 value = {cos(v(theta))}
+Esinth sinth 0 value = {sin(v(theta))}
+
+* we build Valpha and Vbeta from the vqs and vds references and theta
+Ealpha q 0 value = {v(costh)*v(alpha) + v(sinth)*v(beta)}
+Ebeta  d  0 value = {v(sinth)*v(alpha) - v(costh)*v(beta)}  
+.ends park
