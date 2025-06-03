@@ -25,10 +25,6 @@ circuit.include(spice_library['pmsm'])  # Include the PMSM library
 circuit.include(spice_library['clark'])  # Include the PMSM library
 circuit.include(spice_library['iclark'])  # Include the PMSM library
 circuit.include(spice_library['park'])  # Include the PMSM load library
-# create phase A, B, C with 120-degree phase shift
-FLINE = 100@u_Hz
-TLINE = FLINE.period
-AMPLITUDE = 100@u_V
 
 circuit.V('qs_ref', 'qs_ref', circuit.gnd, 11.2*math.sqrt(2)@u_V)  # Reference voltage for q-axis
 circuit.V('ds_ref', 'ds_ref', circuit.gnd, 0@u_V)  # Reference voltage for d-axis
@@ -57,7 +53,14 @@ circuit.R('cs', 'phase_c', 'phc', 1@u_mOhm) # to measure current in phase and mo
 # Add PMSM subcircuit                        
 #+rs=3.4 ls=12.1e-3 poles=4 
 # +lambda_m=0.0827 Tl=0 J=5e-4 Bm=1e-9
-circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm', TL=0.4)
+circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm', 
+          rs=0.1,
+          ls=1e-3,
+          poles=2,
+          lambda_m=0.0827,
+          J=5e-3,
+          Bm=1e-9,
+          TL=0.4)
 # Add load resistors to complete the circuit and prevent floating nodes
 
 
@@ -66,6 +69,9 @@ simulation = simulator.simulation(circuit)
 # simulation.options('RSHUNT = 1e12') # helps with convergence in some cases
 simulation.options('SAVECURRENTS') # save all the currents in the simulation
 # simulation.options('NOINIT')
+# simulation.options('KLU')
+# simulation.options('ABSTOL=1e-10')  # Absolute tolerance for convergence
+# simulation.options('RELTOL=0.01')  # Relative tolerance for convergence
 analysis = simulation.transient(step_time=0.1@u_ms, end_time=2@u_s)
 
 figure1, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(10, 8), sharex=True)
