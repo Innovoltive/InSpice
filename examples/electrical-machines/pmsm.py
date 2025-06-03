@@ -76,6 +76,8 @@ simulation.options('SAVECURRENTS') # save all the currents in the simulation
 # simulation.options('RELTOL=0.01')  # Relative tolerance for convergence
 analysis = simulation.transient(step_time=0.1@u_ms, end_time=2@u_s)
 
+
+##################################################### Plotting #####################################################
 figure1, (ax1, ax2, ax3, ax4) = plt.subplots(4, 1, figsize=(10, 8), sharex=True)
 
 ax1.set_title('Three-Phase PMSM Voltage Sources')
