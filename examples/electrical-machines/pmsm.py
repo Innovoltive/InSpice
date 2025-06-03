@@ -26,7 +26,9 @@ circuit.include(spice_library['clark'])  # Include the PMSM library
 circuit.include(spice_library['iclark'])  # Include the PMSM library
 circuit.include(spice_library['park'])  # Include the PMSM load library
 
-circuit.V('qs_ref', 'qs_ref', circuit.gnd, 11.2*math.sqrt(2)@u_V)  # Reference voltage for q-axis
+#TODO: show how to ramp the input voltage
+# circuit.V('qs_ref', 'qs_ref', circuit.gnd, 11.2*math.sqrt(2)@u_V)  # Reference voltage for q-axis
+circuit.V('qs_ref', 'qs_ref', circuit.gnd, raw_spice='PWL(0 0 100m {11.2*sqrt(2)})')
 circuit.V('ds_ref', 'ds_ref', circuit.gnd, 0@u_V)  # Reference voltage for d-axis
 # Xpark   qs_ref ds_ref theta alpha_ref beta_ref park
 circuit.X('park', 'park', 'qs_ref', 'ds_ref', 'theta', 'alpha_ref', 'beta_ref')
@@ -46,9 +48,9 @@ circuit.C('n', neutral, circuit.gnd, 1@u_nF)  # Neutral capacitor to ground
 # vbs=circuit.SinusoidalVoltageSource('vbs', 'phase_b', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay=   TLINE/3 - 5*TLINE/4)
 # vcs=circuit.SinusoidalVoltageSource('vcs', 'phase_c', circuit.gnd, amplitude=AMPLITUDE, frequency=FLINE, delay= 2*TLINE/3 - 5*TLINE/4)
 
-circuit.R('as', 'phase_a', 'pha', 1@u_mOhm) # to measure current in phase and model cable resistance
-circuit.R('bs', 'phase_b', 'phb', 1@u_mOhm) # to measure current in phase and model cable resistance
-circuit.R('cs', 'phase_c', 'phc', 1@u_mOhm) # to measure current in phase and model cable resistance
+circuit.V('as', 'phase_a', 'pha', 0) # to measure current in phase and model cable resistance
+circuit.V('bs', 'phase_b', 'phb', 0) # to measure current in phase and model cable resistance
+circuit.V('cs', 'phase_c', 'phc', 0) # to measure current in phase and model cable resistance
 
 # Add PMSM subcircuit                        
 #+rs=3.4 ls=12.1e-3 poles=4 
@@ -88,9 +90,9 @@ ax2.set_title('Three-Phase PMSM Currents')
 ax2.set_xlabel('Time [s]')
 ax2.set_ylabel('Current [A]')
 ax2.grid()
-ax2.plot(analysis['@ras[i]'], label='Current Phase A')
-ax2.plot(analysis['@rbs[i]'], label='Current Phase B')
-ax2.plot(analysis['@rcs[i]'], label='Current Phase C')
+ax2.plot(analysis.branches['vas'], label='Current Phase A')
+ax2.plot(analysis.branches['vbs'], label='Current Phase B')
+ax2.plot(analysis.branches['vcs'], label='Current Phase C')
 ax2.legend()
 
 ax3.set_title('PMSM Mechanical Parameters')
