@@ -1,0 +1,46 @@
+**********************************************************
+* MODEL: CCM1
+* Application: two-switch PWM converters
+* Limitations: ideal switches, CCM only, no transformer
+**********************************************************
+* Parameters: none
+**********************************************************
+* Nodes:
+* 1: transistor positive (drain of an n-channel MOS)
+* 2: transistor negative (source of an n-channel MOS)
+* 3: diode cathode
+* 4: diode anode
+* 5: duty cycle control input
+**********************************************************
+.subckt CCM1 1  2  3  4  5
+Et 1 2 value={(1-v(5))*v(3,4)/v(5)}
+Gd 4 3 value={(1-v(5))*i(Et)/v(5)}
+.ends ccm1
+****
+
+
+**********************************************************
+* MODEL: CCM2
+* Application: two-switch PWM converters, includes
+*              conduction losses due to Ron, VD, Rd
+* Limitations: CCM only, no transformer
+**********************************************************
+* Parameters:
+*      Ron=transistor on resistance
+*      VD=diode forward voltage drop (constant)
+*      RD=diode on resistance
+**********************************************************
+* Nodes:
+* 1: transistor positive (drain of an n-channel MOS)
+* 2: transistor negative (source of an n-channel MOS)
+* 3: diode cathode
+* 4: diode anode
+* 5: duty cycle control input
+**********************************************************
+.subckt CCM2 1  2  3  4  5 
++Ron=0 VD=0 RD=0
+Er 1 1x value={i(Et)*(Ron+(1-v(5))*RD/v(5))/v(5)}
+Et 1x 2 value={(1-v(5))*(v(3,4)+VD)/v(5)}
+Gd 4 3 value={(1-v(5))*i(Et)/v(5)}
+.ends
+**********************************************************

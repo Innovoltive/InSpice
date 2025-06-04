@@ -9,7 +9,6 @@
 .param ls=12.1e-3 
 .param poles=4
 .param lambda_m=0.0827
-.param Tl=0.4
 .param J=5e-4
 .param Bm=1e-9
 .param vbus={11.25*sqrt(2)}
@@ -28,7 +27,7 @@ Xm as bs cs theta rpm tl pmsm
 +rs={rs} ls={ls} 
 +poles={poles} 
 +lambda_m={lambda_m} 
-+Tl={Tl} J={J} Bm={Bm}
++J={J} Bm={Bm}
 
 Etl tl 0 value={0.4}
 

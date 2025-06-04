@@ -1,31 +1,37 @@
 
 
 ************************* FOC subcircuit ***************************************
-.subckt foc iasm ibsm icsm rpm theta vbus qs_ref ds_ref rpm_ref=500 vdd=5
+.subckt controller iasm ibsm icsm rpm theta vbus qs_ref ds_ref 
++rpm_ref=500 
++rpm_max=10000 
++vdd=5 
++Iq_Max=15
++poles=4
+
 * transform the current to alpha-beta frame
 Xiab iasm ibsm icsm iam ibm clark
 ** m= measured phase currents
 Xiqs iam ibm theta iqsm idsm park
-.param current_gain= 0.5
+.param current_gain= {vdd/Iq_Max}
 Eiq_meas iq_meas 0 value={v(iqsm)*current_gain}
 Eid_meas id_meas 0 value={v(idsm)*current_gain}
 
 **************** speed loop ***********************
 * reference speed
-.param rpm_gain=1/500
-vrpm rpm_ref 0 dc 0 PWL(0s 0V 1s {rpm_ref*rpm_gain})
+.param rpm_gain={vdd/rpm_max}
+vrpm rpm_ref 0 dc 0 PWL(0s 0V 0.1us {rpm_ref*rpm_gain})
 
 * sampled rpm
 Erpm_meas rpm_meas 0 value={v(rpm)*rpm_gain}
-Xpi rpm_meas rpm_ref te_ref pi c=10u r=10k vdd=5
+Xpi rpm_meas rpm_ref te_ref pi c=2u r=10k vdd=5
 
 
 ****************** current loop ***********************
 * reference for pi controllers
-EIqref iq_ref 0 value={1/(3/2*lambda_m)*v(te_ref) * current_gain}
+EIqref iq_ref 0 value={1/(3/2*poles/2*lambda_m)*v(te_ref) * current_gain}
 EIdref id_ref 0 value={0 * current_gain}
-Xpiq iqsm iq_ref vqs_ref pi c=10u r=10k vdd=5
-Xpid idsm id_ref vds_ref pi c=10u r=10k vdd=5
+Xpiq iqsm iq_ref vqs_ref pi c=100n r=10k vdd=5
+Xpid idsm id_ref vds_ref pi c=100n r=10k vdd=5
 
 
 * now generate the abc voltages
@@ -33,11 +39,35 @@ Xpid idsm id_ref vds_ref pi c=10u r=10k vdd=5
 Eqs_ref qs_ref 0 value={v(vqs_ref)/vdd}
 Eds_ref ds_ref 0 value={v(vds_ref)/vdd}
 
-.ends foc
+.ends controller
+
+
+
 
 
 ************************* SPVM average subcircuit ********************************
-* average spvm block
+* average spvm block using average transistor models
+.subckt spvm q d theta as bs cs bus
+.include average.lib
+Xpark q d theta alpha beta park
+* use reverse park transformation to get the reference voltages
+Xiclark alpha beta a b c iclark
+
+* implement spvm based on ned-mohan book. 
+Ekmax kmax 0 value={max(v(a),max(v(b),v(c)))}
+Ekmin kmin 0 value={min(v(a),min(v(b),v(c)))}
+Ek    k    0 value={(v(kmax)+v(kmin))/2}
+Eda da 0 value={(v(a)-v(k))+1/2}
+Edb db 0 value={(v(b)-v(k))+1/2}
+Edc dc 0 value={(v(c)-v(k))+1/2}
+
+Xqa bus as as 0 da ccm1
+Xqb bus bs bs 0 db ccm1
+Xqc bus cs cs 0 dc ccm1
+.ends spvm
+
+************************* SPVM average subcircuit ********************************
+* average spvm block with just sinewave as output
 .subckt spvm_avg q d theta a b c bus
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
@@ -45,7 +75,6 @@ Xiclark alpha beta a0 b0 c0 iclark
 Ea a 0 value={v(a0) * v(bus)}
 Eb b 0 value={v(b0) * v(bus)}
 Ec c 0 value={v(c0) * v(bus)}
-
 .ends spvm_avg
 
 
@@ -55,7 +84,7 @@ Ec c 0 value={v(c0) * v(bus)}
 r1 meas inn {r}
 c1 inn out {c}
 vdd vcc 0 {vdd}
-vss vee 0 0
+vss vee 0 {-vdd}
 **xop in+ in- vcc vee out genopa1 POLE=20 GAIN=20k VOFF=10m ROUT=10
-xop ref inn vcc vee out genopa1 pole=20 gain=20k voff=10m rout=10
+xop ref inn vcc vee out genopa1 pole=20 gain=20k voff=1m rout=1
 .ends pi

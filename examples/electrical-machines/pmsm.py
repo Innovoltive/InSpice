@@ -61,8 +61,7 @@ circuit.X('M', 'pmsm', 'pha', 'phb', 'phc', 'theta', 'rpm', 'tl',
           poles=2,
           lambda_m=0.0827,
           J=5e-3,
-          Bm=1e-9,
-          TL=0.4)
+          Bm=1e-9)
 circuit.V('tl', 'tl', circuit.gnd, 0.4)  # Load torque voltage source
 # Add load resistors to complete the circuit and prevent floating nodes
 
