@@ -24,11 +24,13 @@ Vas n as_n DC 0V
 Vbs n bs_n DC 0V
 Vcs n cs_n DC 0V
 ran n 0 1e12
-Xm as bs cs theta rpm pmsm
+Xm as bs cs theta rpm tl pmsm
 +rs={rs} ls={ls} 
 +poles={poles} 
 +lambda_m={lambda_m} 
 +Tl={Tl} J={J} Bm={Bm}
+
+Etl tl 0 value={0.4}
 
 
 ** Building the FOC contrller. 

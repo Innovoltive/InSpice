@@ -17,7 +17,7 @@
 
 ***************************Build the voltage sources***************************
 vbus vbus 0 DC {vbus}
-Xspvm qs_ref ds_ref theta as_ref bs_ref cs_ref spvm_avg
+Xspvm qs_ref ds_ref theta as_ref bs_ref cs_ref vbus spvm_avg
 ** Build the input voltage sources based on vqs_ref and vds_ref
 * this will be the outside of the motor
 Eas as as_n value={v(as_ref)}
@@ -31,12 +31,15 @@ can n 0 1e-9
 
 *********************** Adding PMSM model ************************************
 * add the motor model
-Xm as bs cs theta rpm pmsm
+Xm as bs cs theta rpm tl pmsm
 +rs={rs} ls={ls} 
 +poles={poles} 
 +lambda_m={lambda_m} 
 +Tl={Tl} J={J} Bm={Bm}
 
+**************** Apply the load ***************************
+* A fan model
+Etl tl 0 value={1e-6*v(rpm)*v(rpm)}
 
 ********************** Building the FOC controller ***************************
 Eias iasm 0 value={i(vas)}
@@ -49,12 +52,26 @@ Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref foc
 *options rshunt=1e12
 *options noinit
 *options klu
-tran 0.1ms 10s 0s uic
-plot qs_ref ds_ref
+tran 0.1ms 2s 0s uic
+*plot qs_ref ds_ref
 plot v(as) v(bs) v(cs)
-plot i(vas) i(vbs) i(vcs)
-plot v(as) i(vas)
+*plot i(vas) i(vbs) i(vcs)
+*plot v(as) i(vas)
 plot v(rpm)
 .endc
+
+
+************************* SPVM average subcircuit ********************************
+* average spvm block
+.subckt spvm q d theta da db dc
+Xpark q d theta alpha beta park
+* use reverse park transformation to get the reference voltages
+Xiclark alpha beta a b c iclark
+
+* implement spvm based on ned-mohan book. 
+Ekmax kmax 0 value={max(v(a),max(v(b),v(c)))}
+Ekmin kmin 0 value={min(v(a),min(v(b),v(c)))}
+Ek    k    0 value={v(kmax)+v(kmin)/2}
+.ends spvm
 
 

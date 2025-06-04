@@ -2,7 +2,7 @@
 * with a sinusoidal back EMF
 * pmsm model. as, bs, cs are the phase voltages and theta is the electrical angle as output
 
-.subckt pmsm as bs cs theta rpm
+.subckt pmsm as bs cs theta rpm tl
 +rs=3.4 ls=12.1e-3 poles=4 
 +lambda_m=0.0827 Tl=0 J=5e-4 Bm=1e-9
 
@@ -53,7 +53,7 @@ Ete te 0 value={3/2 * poles/2 * (v(lds)*v(iqs) - v(lqs)*v(ids))}
 
 
 * shaft speed (wm) calculation wm = Te-Tl /(J*s + Bm)
-Etl tl 0 value={tl} 
+*Etl tl 0 value={tl} 
 Etetl te_tl 0 value={v(te) - v(tl)}
 Awm te_tl wm wmblk
 .model wmblk s_xfer(num_coeff=[1] den_coeff=[{J} {Bm}] int_ic=[0])

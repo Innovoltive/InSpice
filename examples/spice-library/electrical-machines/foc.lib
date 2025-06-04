@@ -1,7 +1,7 @@
 
 
 ************************* FOC subcircuit ***************************************
-.subckt foc iasm ibsm icsm rpm theta vbus qs_ref ds_ref
+.subckt foc iasm ibsm icsm rpm theta vbus qs_ref ds_ref rpm_ref=500 vdd=5
 * transform the current to alpha-beta frame
 Xiab iasm ibsm icsm iam ibm clark
 ** m= measured phase currents
@@ -12,7 +12,6 @@ Eid_meas id_meas 0 value={v(idsm)*current_gain}
 
 **************** speed loop ***********************
 * reference speed
-.param rpm_ref=500
 .param rpm_gain=1/500
 vrpm rpm_ref 0 dc 0 PWL(0s 0V 1s {rpm_ref*rpm_gain})
 
@@ -31,19 +30,22 @@ Xpid idsm id_ref vds_ref pi c=10u r=10k vdd=5
 
 * now generate the abc voltages
 * multiply the output by Vbus
-.param vdd=5
-Eqs_ref qs_ref 0 value={v(vqs_ref)/vdd*v(vbus)}
-Eds_ref ds_ref 0 value={v(vds_ref)/vdd*v(vbus)}
+Eqs_ref qs_ref 0 value={v(vqs_ref)/vdd}
+Eds_ref ds_ref 0 value={v(vds_ref)/vdd}
 
 .ends foc
 
 
 ************************* SPVM average subcircuit ********************************
 * average spvm block
-.subckt spvm_avg q d theta a b c
+.subckt spvm_avg q d theta a b c bus
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
-Xiclark alpha beta a b c iclark
+Xiclark alpha beta a0 b0 c0 iclark
+Ea a 0 value={v(a0) * v(bus)}
+Eb b 0 value={v(b0) * v(bus)}
+Ec c 0 value={v(c0) * v(bus)}
+
 .ends spvm_avg
 
 
