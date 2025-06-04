@@ -24,17 +24,10 @@ pip install -e .
 
 ## Dependencies
 
-- Python 3.x
+- Python >= 3.12
 - Ngspice (as shared library)
 - matplotlib (for plotting)
 - numpy (for numerical computation)
-- lit (for testing)
-
-To install lit (LLVM Integrated Tester):
-
-```bash
-pip install lit
-```
 
 ## Usage
 
