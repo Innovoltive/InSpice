@@ -258,13 +258,14 @@ class Analysis:
 
     ##############################################
 
-    def __init__(self, simulation, nodes=(), branches=(), elements=(), internal_parameters=()):
+    def __init__(self, simulation, nodes=(), branches=(), node_currents=(), elements=(), internal_parameters=()):
         # Fixme: branches are elements in fact, and elements is not yet supported ...
         self._simulation = simulation
         # Fixme: to func?
         self._nodes = {waveform.name: waveform for waveform in nodes}
         self._branches = {waveform.name: waveform for waveform in branches}
         self._elements = {waveform.name: waveform for waveform in elements}
+        self._node_currents = {waveform.name: waveform for waveform in node_currents}
         self._internal_parameters = {waveform.name: waveform for waveform in internal_parameters}
 
     ##############################################
@@ -283,6 +284,10 @@ class Analysis:
     @property
     def nodes(self):
         return self._nodes
+    
+    @property
+    def node_currents(self):
+        return self._node_currents
 
     @property
     def branches(self):
@@ -420,9 +425,10 @@ class TransientAnalysis(Analysis):
 
     ##############################################
 
-    def __init__(self, simulation, time, nodes, branches, internal_parameters):
+    def __init__(self, simulation, time, nodes, branches, node_currents, internal_parameters):
         super().__init__(
             simulation=simulation, nodes=nodes, branches=branches,
+            node_currents=node_currents,
             internal_parameters=internal_parameters,
         )
         self._time = time

@@ -180,6 +180,10 @@ class Vector:
     def is_voltage_node(self):
         return self._type == self._ngspice_shared.simulation_type.voltage and not self.is_interval_parameter
 
+
+    @property
+    def is_node_current(self):
+        return self._type == self._ngspice_shared.simulation_type.current and self.is_interval_parameter
     ##############################################
 
     @property
@@ -244,6 +248,11 @@ class Plot(dict):
         return [variable.to_waveform(abscissa, to_float=to_float)
                 for variable in self.values()
                 if variable.is_voltage_node]
+
+    def node_currents(self, to_float=False, abscissa=None):
+        return [variable.to_waveform(abscissa, to_float=to_float)
+                for variable in self.values()
+                if variable.is_node_current]
 
     ##############################################
 
@@ -348,6 +357,7 @@ class Plot(dict):
             time=time,
             nodes=self.nodes(abscissa=time),
             branches=self.branches(abscissa=time),
+            node_currents=self.node_currents(abscissa=time),
             internal_parameters=self.internal_parameters(abscissa=time),
         )
 
@@ -439,7 +449,7 @@ class NgSpiceShared:
             elif ConfigInstall.OS.on_linux:
                 path = 'libngspice{}.so'
             elif ConfigInstall.OS.on_web:
-                path = 'libngspice{}.so'
+                path = 'libngspice{}.so'                
             else:
                 raise NotImplementedError
             cls.LIBRARY_PATH = str(path)
@@ -451,11 +461,10 @@ class NgSpiceShared:
         # name must not be prefixed by lib !
         if name.startswith('lib'):
             name = name[3:]
-        if '.so' in name or '.dll' in name or '.dylib' in name:
+        if ".so" in name or ".dll" in name or ".dylib" in name:
             name = name.split('.')[0]
         cls._logger.debug(f'Search library "{name}"')
         return ctypes.util.find_library(name)
-
     ##############################################
 
     _instances = {}
@@ -550,7 +559,6 @@ class NgSpiceShared:
         api_path = Path(__file__).parent.joinpath('api.h')
         with open(api_path, encoding='utf8') as fh:
             ffi.cdef(fh.read())
-
         message = f'Load library {self.library_path}'
         self._logger.debug(message)
         if verbose:

@@ -65,6 +65,7 @@ class SpiceLibrary:
     EXTENSIONS = (
         '.spice',
         '.lib',
+        '.cir',
         '.mod',
         '.lib@xyce',
         '.mod@xyce',

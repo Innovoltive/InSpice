@@ -1,0 +1,126 @@
+* PSpice Model Editor - Version 16.2.0
+*$
+* OrCAD Model Editor - Version 9.0
+* ADA4940 SPICE Macro-model, CK, ADI  rev B; 2/2012     
+*
+* Copyright 2011 by Analog Devices, Inc.
+*
+* Refer to "README.DOC" file for License Statement.  Use of this model
+* indicates your acceptance with the terms and provisions in the License Statement.
+*
+* This model will give typical performance characteristics
+* for the following parameters;
+*
+*     closed loop gain and phase vs bandwidth
+*     output voltage limiting
+*     offset voltage (is  non-static, will  vary with gain)
+*     ibias (again, is static, will not vary with vcm)
+*     slew rate and step response performance (estimated)
+*     (slew rate is based on 10-90% of step response)
+*     current on output will be reflected to the supplies 
+*     Vocm is varable and include input typical offset
+*     V(Inoise) is not fully characterized
+*     I(Inoise) is not fully characterized 
+*     distortion is not characterized
+*     cmrr is not characterized in this version.
+*
+* Node assignments
+*            FD output neggative
+*            |   FD oputput positive
+* 		 |   |    non-inverting input
+*		 |   |    |   inverting input
+*		 |   |    |   |   positive supply
+*		 |   |    |   |   |    negative supply
+*		 |   |    |   |   |    |     output positive
+*		 |   |    |   |   |    |     |     output negative
+*		 |   |    |   |   |    |     |     |    vocm input
+*		 |   |    |   |   |    |     |     |    |
+.SUBCKT ADA4940 9b 3b 3a 9 99 50 71b 71 110
+V_Vos        9  8 DC  0.33m
+* Cdif		 9  3a  1pF 
+Q_Q2         50 N00083 6 QbreakP area=1u
+Q_Q7         50 3A N00062 QbreakP area=25u
+Q_Q4         50 N00069 5 QbreakP area=1u
+Q_Q5         50 8 N00096 QbreakP area=25u
+Q_Q8         99 3A N00069 QbreakN area=25u
+Q_Q6         99 8 N00083 QbreakN area=25u
+Q_Q3         99 N00062 5 QbreakN area=1u
+Q_Q1         99 N00096 6 QbreakN area=1u
+I_I6         N00069 50 DC 1m  
+I_I7         99 N00096 DC 1m  
+I_I5         N00083 50 DC 1m  
+I_I8         99 N00062 DC 1m  
+D_D14         VMS N234651 Dbreak 
+V_V18         N234651 56 7
+G_G9         0 76 110 0 1
+G_G8         0 75 110 0 1
+R_R19         50 100  200k  
+R_R18         100 99  200k  
+V_V14         100 110 1m
+V_V19         N236660 VMS 7
+D_D15         56 N236660 Dbreak 
+G_G2         0 76 13 VMS 1
+G_G1         13 14 56 VMS 0.01
+R_R22         70B 0  1  
+R_R24         0 70  1  
+C_C3         13 VMS  0.3n  
+R_R4         0 76  1  
+R_R2         13 VMS  50k  
+C_C2         VMS 14  0.3n  
+G_G3         0 75 14 VMS 1
+R_R1         14 VMS  50k  
+R_R3         75 0  1  
+C_C7         70B 0  1p  
+C_C6         0 70  1p  
+C_C5         0 76  1.3n  
+C_C1         14 13  0.3n  
+C_C4         75 0  1.3n  
+G_G11         0 70B 0 75 -1
+G_G12         0 70 0 76 -1
+V_V16         99 N20781 1.2
+D_D9         110 N20781 Dbreak 
+D_D10         N20812 110 Dbreak 
+V_V17         N20812 50 1.2
+I_I9         50 99 DC 10m  
+D_D21         5 6 Dbreak 1u
+D_D22         6 5 Dbreak 1u
+I_I10         99 50 DC 1.25m  
+Q_Q10         50 N72433 71 QbreakP area=1m
+Q_Q9         99 N72445 71 QbreakN area=1m
+V_V12         99 N06648 0.8
+V_V6         99 N06465 1.85
+V_V9         N06549 50 0.6
+V_V7         N06507 50 0.6
+V_V13         N06676 50 0.8
+V_V8         99 N06517 1.85
+V_V11         N06609 50 0.8
+V_V10         99 N06576 0.8
+G_G10         VMS 56 5 6 1
+D_D1         5 N06465 Dbreak 
+D_D2         N06507 5 Dbreak 
+D_D3         6 N06517 Dbreak 
+D_D4         N06549 6 Dbreak 
+D_D5         76 N06576 Dbreak 
+D_D6         N06609 76 Dbreak 
+D_D7         75 N06648 Dbreak 
+D_D8         N06676 75 Dbreak 
+R_R20         VMS 56  100  
+Q_Q13         50 70 N72445 QbreakP area=1m
+Q_Q14         99 70 N72433 QbreakN area=1m
+Q_Q11         99 N73331 71B QbreakN area=1m
+Q_Q12         50 N73343 71B QbreakP area=1m
+E_E3         VMS 0 POLY(2) 99 0 50 0 0 0.5 0.5
+V_V27         3B 71B 0V
+V_V26         9B 71 0V
+I_I11         N72433 50 DC 1m  
+I_I12         99 N72445 DC 1m  
+Q_Q15         50 70B N73331 QbreakP area=1m
+Q_Q16         99 70B N73343 QbreakN area=1m
+I_I13         99 N73331 DC 1m  
+I_I14         N73343 50 DC 1m
+.MODEL QbreakP PNP (KF=1E-14 AF=1.07)
+.MODEL QbreakN NPN (KF=1E-14 AF=1.07)
+.MODEL Dbreak D(IS=1E-14)
+
+.ENDS
+*$

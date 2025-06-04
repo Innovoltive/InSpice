@@ -41,6 +41,7 @@ class OsFactory:
     @property
     def on_osx(self):
         return self._name == 'osx'
+    
     @property
     def on_web(self):
         return self._name == 'web'

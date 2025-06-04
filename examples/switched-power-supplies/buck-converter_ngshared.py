@@ -110,6 +110,7 @@ options = f'.options TEMP = 25C \n'
 options += '.options TNOM = 25C \n'
 options += '.options NOINIT \n'
 options += '.options RSHUNT = 1e12 \n'
+options += '.options SAVECURRENTS \n'
 # options += '.ic v(opamp_out) = 0\n'
 options += f'.tran 1us {end_time} 0 1ns uic\n'
 options += '.end'
@@ -120,7 +121,7 @@ ngspice.load_circuit(circ_str)
 print('Loaded circuit:')
 # print(ngspice.listing())
 
-live = True
+live = False
 ngspice.run(background=live)
 print('Plots:', ngspice.plot_names)
 figure, (ax1, ax2) = plt.subplots(2, 1, figsize=(20, 10), sharex=True)
@@ -147,6 +148,7 @@ if not live:
     print(ngspice.status())
     plot_data = ngspice.plot(simulation=None, plot_name=ngspice.last_plot)
     analysis = plot_data.to_analysis()
+    note_current = analysis.node_currents
     update_plots(ax1, ax2, analysis.time, analysis)
     plt.show(block=True)
 else:
