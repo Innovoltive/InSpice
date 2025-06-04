@@ -48,6 +48,9 @@ Eibs ibsm 0 value={i(vbs)}
 Eics icsm 0 value={i(vcs)}
 
 Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
+* generate the abc voltages
+*vqs_ref qs_ref 0 DC 0V PWL(0s 0V 0.1s 1)
+*vds_ref ds_ref 0 0
 
 .control
 tran 0.1ms 1s 0s uic
