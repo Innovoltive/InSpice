@@ -34,10 +34,14 @@ Xpiq iqsm iq_ref vqs_ref pi c=100n r=10k vdd=5
 Xpid idsm id_ref vds_ref pi c=100n r=10k vdd=5
 
 
-* now generate the abc voltages
-* multiply the output by Vbus
-Eqs_ref qs_ref 0 value={v(vqs_ref)/vdd}
-Eds_ref ds_ref 0 value={v(vds_ref)/vdd}
+** Vqs and Vds max is Vbus/sqrt(3)  so the normalized values are 1/sqrt(3)
+Eqs_ref qs_ref 0 value={v(vqs_ref)/vdd*1/sqrt(3)}
+Eds_ref ds_ref 0 value={v(vds_ref)/vdd*1/sqrt(3)}
+
+*alternative
+*Eqs_ref qs_ref 0 value={limit(v(vqs_ref)/vdd, -1/sqrt(3), 1/sqrt(3))}
+*Eds_ref ds_ref 0 value={limit(v(vds_ref)/vdd, -1/sqrt(3), 1/sqrt(3))}
+*.func LIMIT(x,a,b) {min(max(x, a), b)}
 
 .ends controller
 
@@ -45,7 +49,7 @@ Eds_ref ds_ref 0 value={v(vds_ref)/vdd}
 
 
 
-************************* SPVM average subcircuit ********************************
+************************* SPVM using average transistor  **********************
 * average spvm block using average transistor models
 .subckt spvm q d theta as bs cs bus
 .include average.lib
@@ -66,15 +70,16 @@ Xqb bus bs bs 0 db ccm1
 Xqc bus cs cs 0 dc ccm1
 .ends spvm
 
-************************* SPVM average subcircuit ********************************
+************************* SPVM avesubcircuit ********************************
 * average spvm block with just sinewave as output
 .subckt spvm_avg q d theta a b c bus
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
 Xiclark alpha beta a0 b0 c0 iclark
-Ea a 0 value={v(a0) * v(bus)}
-Eb b 0 value={v(b0) * v(bus)}
-Ec c 0 value={v(c0) * v(bus)}
+Ea a n value={v(a0) * v(bus)}
+Eb b n value={v(b0) * v(bus)}
+Ec c n value={v(c0) * v(bus)}
+can n 0 1e-9
 .ends spvm_avg
 
 
@@ -86,5 +91,5 @@ c1 inn out {c}
 vdd vcc 0 {vdd}
 vss vee 0 {-vdd}
 **xop in+ in- vcc vee out genopa1 POLE=20 GAIN=20k VOFF=10m ROUT=10
-xop ref inn vcc vee out genopa1 pole=20 gain=20k voff=1m rout=1
+xop ref inn vcc vee out genopa1 pole=1e6 gain=200k voff=1m rout=1
 .ends pi
