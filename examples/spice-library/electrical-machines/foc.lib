@@ -49,8 +49,8 @@ Eds_ref ds_ref 0 value={v(vds_ref)/vdd*1/sqrt(3)}
 
 ************************* PWM SPVM block ********************************
 * PWM SPVM block using average transistor models
-.subckt spvmpwm q d theta da db dc fsw=10k
-.include average.lib
+.subckt spvmpwm q d theta daH daL dbH dbL dcH dcL fsw=10k dt=10n
+.include switching.lib
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
 Xiclark alpha beta a b c iclark
@@ -65,8 +65,18 @@ Edcref dcref 0 value={(v(c)-v(k))+1/2}
 
 Vtri tri 0 DC PWL(0s 0 {1/2/fsw} {1} {1/fsw} 0 r=0s)
 Eda da 0 value={v(daref) >= v(tri) ? 1 : 0}
+Eda_n dan 0 value={v(daref) >= v(tri) ? 0 : 1}
+
 Edb db 0 value={v(dbref) >= v(tri) ? 1 : 0}
+Edb_n dbn 0 value={v(dbref) >= v(tri) ? 0 : 1}
+
 Edc dc 0 value={v(dcref) >= v(tri) ? 1 : 0}
+Edc_n dcn 0 value={v(dcref) >= v(tri) ? 0 : 1}
+
+* create the dead time for the pwm signals
+xda da dan daH daL dead_time td={dt}
+xdb db dbn dbH dbL dead_time td={dt}
+xdc dc dcn dcH dcL dead_time td={dt}
 
 .ends spvmpwm
 
