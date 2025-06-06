@@ -1,7 +1,7 @@
 * this uses the pmsm.lib. test how to use the .lib file
 .title PMSM model with sinusoidal back EMF
 .include "../../spice-library/electrical-machines/clark_park.lib"
-.include "../../spice-library/electrical-machines/pmsm.lib"
+.include "../../spice-library/electrical-machines/pmsm2.lib"
 .include "../../spice-library/electrical-machines/foc.lib"
 .include "../../spice-library/electrical-machines/average.lib"
 .include "../../spice-library/semiconductors/operational-amplifier/generic_opamp.lib"
@@ -17,8 +17,8 @@
 
 ***************************Build the voltage sources***************************
 vbus vbus 0 DC {vbus}
-Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg
-*Xsvm qs_ref ds_ref theta as bs cs vbus spvm
+*Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg
+Xsvm qs_ref ds_ref theta as bs cs vbus spvm
 ** put a voltage in series with the motor to measure the current
 Vas as asm DC 0V
 Vbs bs bsm DC 0V
