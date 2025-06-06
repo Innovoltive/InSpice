@@ -1,33 +1,69 @@
-** this is a simple inverter model for testing the pwm signals
+** An inverter model that uses the irf150 mosfet model.
+.subckt inverter2 dc_hi dc_lo dah dal dbh dbl dch dcl pha phb phc
+.include "../discrete-semiconductors/transistors/MOSFET/irf150.lib"
+
+* phase a
+Eagh gha1 pha value={v(daH) > 0.1 ? 10 : 0}
+Ragh gha1 gha 10
+XQah dc_hi gha pha irf150
+
+Eagl gla1 dc_lo value={v(daL) > 0.1 ? 10 : 0}
+Ragl gla1 gla 10
+XQal pha gla dc_lo irf150
+
+* phase b
+Ebh ghb1 phb value={v(dbH) > 0.1 ? 10 : 0}
+Rbh ghb1 ghb 10
+XQbh dc_hi ghb phb irf150
+
+Ebgl gbl1 dc_lo value={v(dbL) > 0.1 ? 10 : 0}
+Rbgl gbl1 gbl 10
+XQbl phb gbl dc_lo irf150
+
+* phase c
+Ech ghc1 phc value={v(dcH) > 0.1 ? 10 : 0}
+Rch ghc1 ghc 10
+XQch dc_hi ghc phc irf150
+
+Ecgl gcl1 dc_lo value={v(dcL) > 0.1 ? 10 : 0}
+Rcgl gcl1 gcl 10
+XQcl phc gcl dc_lo irf150
+
+.ends inverter2
+
+
+
+* an inverter model that uses ideal switches and diodes.
 .subckt inverter dc_hi dc_lo dah dal dbh dbl dch dcl pha phb phc 
-.model fet sw vt=0.5 vh=0.01 ron=1e-3 roff=10k
+.model fet sw vt=0.5 vh=0.01 ron=1e-3 roff=1ook
 .model d d
+.param coss=100p
 
 * phase a
 SaH dc_hi pha dah 0 fet OFF
 daH pha dc_hi 0 d
-cah pha dc_hi 0 100p
+cah pha dc_hi 0 {coss}
 
 SaL pha dc_lo dal 0 fet OFF
 dal dc_lo pha 0 d
-cal dc_lo pha 0 100p
+cal dc_lo pha 0 {coss}
 
 * phase b
 SbH dc_hi phb dbh 0 fet OFF
 dbH phb dc_hi 0 d
-cbh phb dc_hi 0 100p
+cbh phb dc_hi 0 {coss}
 
 SbL phb dc_lo dbl 0 fet OFF
 dbl dc_lo phb 0 d
-cbl dc_lo phb 0 100p
+cbl dc_lo phb 0 {coss}
 
 * phase c
 ScH dc_hi phc dch 0 fet OFF
 dch phc dc_hi 0 d
-cch phc dc_hi 0 100p
+cch phc dc_hi 0 {coss}
 
 ScL phc dc_lo dcl 0 fet OFF
 dcl dc_lo phc 0 d
-ccl dc_lo phc 0 100p
+ccl dc_lo phc 0 {coss}
 
 .ends inverter
