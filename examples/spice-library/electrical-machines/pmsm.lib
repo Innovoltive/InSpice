@@ -16,20 +16,18 @@ vcs cs cs0 DC 0V
 
 ras as0 as1 {rs}
 Las as1 as2 {ls}
-*Eas as2 n value={lambda_m*v(we)*cos(v(theta))}
-Eemfa as2 n value={v(emfan)}
+Eas as2 n value={lambda_m*v(we)*cos(v(theta))}
 
 
 rbs bs0 bs1 {rs}
 Lbs bs1 bs2 {ls}
-*Ebs bs2 n value={lambda_m*v(we)*cos(v(theta) - 2*3.14/3)}
-Eemfb bs2 n value={v(emfbn)}
+Ebs bs2 n value={lambda_m*v(we)*cos(v(theta) - 2*3.14/3)}
 
 rcs cs0 cs1 {rs}
 Lcs cs1 cs2 {ls}
-*Ecs cs2 n value={lambda_m*v(we)*cos(v(theta) - 4*3.14/3)}
-Eemfc cs2 n value={v(emfcn)}
+Ecs cs2 n value={lambda_m*v(we)*cos(v(theta) - 4*3.14/3)}
 
+* add a capacitor to ground to avoid floating nodes
 can n 0 1e-9
 
 Eias ias 0 value={i(vas)}
@@ -60,16 +58,6 @@ Atheta we theta thblk
 .model thblk int(in_offset=0.0 gain=1.0
 + out_lower_limit=-1e12 out_upper_limit=1e12
 + limit_range=1e-9 out_ic=0.0)
-
-
-* create the back emf
-Eemfq emfq  0  value={lambda_m*v(we)}
-Edmfd emfd  0  value={0}
-
-Xmfab emfq emfd theta emfa emfb park
-Xemfabc emfa emfb emfan emfbn emfcn iclark 
-
-
 
 
 .ends pmsm
