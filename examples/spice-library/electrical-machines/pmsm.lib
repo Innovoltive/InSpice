@@ -1,4 +1,4 @@
-* this code implements a permanent magnet synchronous machine (PMSM) model
+* this code implements a permanent magnet synchronous machine (PMSM) model using dq model
 * with a sinusoidal back EMF
 * pmsm model. as, bs, cs are the phase voltages and theta is the electrical angle as output
 
