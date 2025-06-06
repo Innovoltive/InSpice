@@ -3,6 +3,7 @@
 .include "../../spice-library/electrical-machines/clark_park.lib"
 .include "../../spice-library/electrical-machines/pmsm.lib"
 .include "../../spice-library/electrical-machines/foc.lib"
+.include "../../spice-library/electrical-machines/inverter.lib"
 .include "../../spice-library/electrical-machines/average.lib"
 .include "../../spice-library/semiconductors/operational-amplifier/generic_opamp.lib"
 
@@ -18,8 +19,9 @@
 ***************************Build the voltage sources***************************
 vbus vbus 0 DC {vbus}
 *Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg_simple
-Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
-*Xspvmpwm qs_ref ds_ref theta da db dc spvmpwm fsw=10k
+*Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
+Xspvmpwm qs_ref ds_ref theta daH daL dbH dbL dcH dcL spvmpwm fsw=10k dt=100n
+Xinverter vbus 0 daH daL dbH dbL dcH dcL as bs cs inverter
 ** put a voltage in series with the motor to measure the current
 Vas as asm DC 0V
 Vbs bs bsm DC 0V
@@ -51,8 +53,10 @@ Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
 *Ran n 0 1k
 
 .control
-tran 0.1ms 1s 0s uic
-*options reltol=.0001
+tran 0.1m 1s 0s uic
+options reltol=.001
+options abstol=1e-9
+*options klu
 *plot qs_ref ds_ref
 plot v(as) v(bs) v(cs)
 plot i(vas) i(vbs) i(vcs)
