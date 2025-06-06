@@ -2,7 +2,7 @@
 * with a sinusoidal back EMF
 * pmsm model. as, bs, cs are the phase voltages and theta is the electrical angle as output
 
-.subckt pmsm as bs cs theta rpm tl
+.subckt pmsmdq as bs cs theta rpm tl
 +rs=3.4 ls=12.1e-3 poles=4 
 +lambda_m=0.0827 J=5e-4 Bm=1e-9
 
@@ -72,5 +72,5 @@ Atheta we theta thblk
 + limit_range=1e-9 out_ic=0.0)
 
 
-.ends pmsm
+.ends pmsmdq
 
