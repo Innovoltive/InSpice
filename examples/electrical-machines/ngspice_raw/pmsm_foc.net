@@ -17,46 +17,45 @@
 
 ***************************Build the voltage sources***************************
 vbus vbus 0 DC {vbus}
-Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg
-*Xsvm qs_ref ds_ref theta as bs cs vbus spvm
+*Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg
+Xsvm qs_ref ds_ref theta as bs cs vbus spvm
 ** put a voltage in series with the motor to measure the current
 Vas as asm DC 0V
 Vbs bs bsm DC 0V
 Vcs cs csm DC 0V
 
 *********************** Adding PMSM model ************************************
-* add the motor model
-Xm asm bsm csm theta rpm tl pmsm
-+rs={rs} ls={ls} poles={poles} lambda_m={lambda_m} J={J} Bm={Bm}
-**************** Apply the load 
-* A fan model
-Etl tl 0 value={1e-6*v(rpm)*v(rpm)}
+** add the motor model
+*Xm asm bsm csm theta rpm tl pmsm
+*+rs={rs} ls={ls} poles={poles} lambda_m={lambda_m} J={J} Bm={Bm}
+** A fan model
+*Etl tl 0 value={1e-6*v(rpm)*v(rpm)}
 
 ********************** Building the FOC controller ***************************
 Eias iasm 0 value={i(vas)}
 Eibs ibsm 0 value={i(vbs)}
 Eics icsm 0 value={i(vcs)}
 
-Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
+*Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
 
 **for testing uncomment the lines below
-*vqs_ref qs_ref 0 DC 0V PWL(0s 0V 0.1s {1/sqrt(3)}) 
-*vds_ref ds_ref 0 0
-*Vtheta theta 0 DC 0V PWL(0s 0V {1/5} {2*3.14} {1/5} 0V r=0s)
+vqs_ref qs_ref 0 DC 0V PWL(0s 0V 0.1us {1/sqrt(3)}) 
+vds_ref ds_ref 0 0
+Vtheta theta 0 DC 0V PWL(0s 0V {1/5} {2*3.14} {1/5} 0V r=0s)
 * apply inductive load 
-*Lasm asm n 12.1e-3
-*Lbsm bsm n 12.1e-3
-*Lcsm csm n 12.1e-3
-*Ran n 0 1k
+Lasm asm n 12.1e-3
+Lbsm bsm n 12.1e-3
+Lcsm csm n 12.1e-3
+Ran n 0 1e12
 
 .control
 tran 0.1ms 2s 0s uic
-*options reltol=.0001
-*plot qs_ref ds_ref
+*options ngdebug
+*options klu
+options reltol=.001
+plot qs_ref ds_ref
 plot v(as) v(bs) v(cs)
 plot i(vas) i(vbs) i(vcs)
 *plot v(as) i(vas)
-plot v(rpm)
+*plot v(rpm)
 .endc
-
-
