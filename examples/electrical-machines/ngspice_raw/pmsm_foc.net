@@ -17,7 +17,9 @@
 .param vbus={30}
 
 ***************************Build the voltage sources***************************
-vbus vbus 0 DC {vbus}
+vbus vbus1 0 DC {vbus}
+rbus vbus1 vbus 0.1
+
 *Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
 ** To enable pwm spvm uncomment the lines below and comment the line above
 Xspvmpwm qs_ref ds_ref theta daH daL dbH dbL dcH dcL spvmpwm fsw=1k dt=100n
@@ -55,7 +57,12 @@ Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
 
 .control
 tran 0.1m 1s 0s uic
-*options gear
+*options trtol=1
+*options rseries=0.05
+*options rshunt=1G
+*options cshunt=1p
+*options chgtol=1e-6
+*options method=gear
 *options reltol=.001
 *options klu
 *plot qs_ref ds_ref
