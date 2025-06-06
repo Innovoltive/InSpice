@@ -31,7 +31,6 @@ Lcs cs1 cs2 {ls}
 Eemfc cs2 n value={v(emfcn)}
 
 can n 0 1e-9
-ran n 0 1e12
 
 Eias ias 0 value={i(vas)}
 Eibs ibs 0 value={i(vbs)}
