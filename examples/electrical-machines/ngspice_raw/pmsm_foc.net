@@ -17,8 +17,9 @@
 
 ***************************Build the voltage sources***************************
 vbus vbus 0 DC {vbus}
-*Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg
-Xsvm qs_ref ds_ref theta as bs cs vbus spvm
+*Xspvm qs_ref ds_ref theta as bs cs vbus spvm_avg_simple
+Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
+*Xspvmpwm qs_ref ds_ref theta da db dc spvmpwm fsw=10k
 ** put a voltage in series with the motor to measure the current
 Vas as asm DC 0V
 Vbs bs bsm DC 0V
@@ -50,10 +51,8 @@ Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
 *Ran n 0 1e12
 
 .control
-tran 0.1ms 2s 0s uic
-*options ngdebug
-*options klu
-*options reltol=.001
+tran 0.1ms 1s 0s uic
+*options reltol=.0001
 *plot qs_ref ds_ref
 *plot v(as) v(bs) v(cs)
 plot i(vas) i(vbs) i(vcs)

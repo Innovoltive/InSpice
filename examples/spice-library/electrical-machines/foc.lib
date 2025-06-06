@@ -47,11 +47,33 @@ Eds_ref ds_ref 0 value={v(vds_ref)/vdd*1/sqrt(3)}
 
 
 
+************************* PWM SPVM block ********************************
+* PWM SPVM block using average transistor models
+.subckt spvmpwm q d theta da db dc fsw=10k
+.include average.lib
+Xpark q d theta alpha beta park
+* use reverse park transformation to get the reference voltages
+Xiclark alpha beta a b c iclark
+
+* implement spvm based on ned-mohan book. 
+Ekmax kmax 0 value={max(v(a),max(v(b),v(c)))}
+Ekmin kmin 0 value={min(v(a),min(v(b),v(c)))}
+Ek    k    0 value={(v(kmax)+v(kmin))/2}
+Edaref daref 0 value={(v(a)-v(k))+1/2}
+Edbref dbref 0 value={(v(b)-v(k))+1/2}
+Edcref dcref 0 value={(v(c)-v(k))+1/2}
+
+Vtri tri 0 DC PWL(0s 0 {1/2/fsw} {1} {1/fsw} 0 r=0s)
+Eda da 0 value={v(daref) >= v(tri) ? 1 : 0}
+Edb db 0 value={v(dbref) >= v(tri) ? 1 : 0}
+Edc dc 0 value={v(dcref) >= v(tri) ? 1 : 0}
+
+.ends spvmpwm
 
 
 ************************* SPVM using average transistor  **********************
 * average spvm block using average transistor models
-.subckt spvm q d theta as bs cs bus
+.subckt spvm_avg q d theta as bs cs bus
 .include average.lib
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
@@ -68,11 +90,11 @@ Edc dc 0 value={(v(c)-v(k))+1/2}
 Xqa bus as as 0 da ccm1
 Xqb bus bs bs 0 db ccm1
 Xqc bus cs cs 0 dc ccm1
-.ends spvm
+.ends spvm_avg
 
 ************************* SPVM avesubcircuit ********************************
 * average spvm block with just sinewave as output
-.subckt spvm_avg q d theta a b c bus
+.subckt spvm_avg_simple q d theta a b c bus
 Xpark q d theta alpha beta park
 * use reverse park transformation to get the reference voltages
 Xiclark alpha beta a0 b0 c0 iclark
@@ -80,7 +102,7 @@ Ea a n value={v(a0) * v(bus)}
 Eb b n value={v(b0) * v(bus)}
 Ec c n value={v(c0) * v(bus)}
 can n 0 1e-9
-.ends spvm_avg
+.ends spvm_avg_simple
 
 
 ***************************** PI controller subcircuit ********************************
