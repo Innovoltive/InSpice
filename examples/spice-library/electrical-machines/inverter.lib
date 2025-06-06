@@ -1,0 +1,33 @@
+** this is a simple inverter model for testing the pwm signals
+.subckt inverter dc_hi dc_lo dah dal dbh dbl dch dcl pha phb phc 
+.model fet sw vt=0.5 vh=0.01 ron=1e-3 roff=10k
+.model d d
+
+* phase a
+SaH dc_hi pha dah 0 fet OFF
+daH pha dc_hi 0 d
+cah pha dc_hi 0 100p
+
+SaL pha dc_lo dal 0 fet OFF
+dal dc_lo pha 0 d
+cal dc_lo pha 0 100p
+
+* phase b
+SbH dc_hi phb dbh 0 fet OFF
+dbH phb dc_hi 0 d
+cbh phb dc_hi 0 100p
+
+SbL phb dc_lo dbl 0 fet OFF
+dbl dc_lo phb 0 d
+cbl dc_lo phb 0 100p
+
+* phase c
+ScH dc_hi phc dch 0 fet OFF
+dch phc dc_hi 0 d
+cch phc dc_hi 0 100p
+
+ScL phc dc_lo dcl 0 fet OFF
+dcl dc_lo phc 0 d
+ccl dc_lo phc 0 100p
+
+.ends inverter
