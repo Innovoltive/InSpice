@@ -1,0 +1,20 @@
+
+.subckt dead_time c cn c1 c2 Td=10n
+
+* Rising edge delay path (for c1)
+b1i cc 0 v=v(c)
+R1 cc cd 1k
+C1 cd 0 {Td/1000}
+D1 cd cc D
+E1 c1 0 value={v(cd)>0.5 ? 1 : 0}
+
+* Falling edge delay path (for c2)
+b2i cb 0 v=v(cn)
+R2 cb cbd 1k
+C2 cbd 0 {Td/1000}
+D2 cbd cb D
+E2 c2 0 value={v(cbd)>0.5 ? 1 : 0}
+
+* Define the dead time parameter
+.model D D
+.ends dead_time
