@@ -32,7 +32,7 @@ can n 0 1e-9
 
 
 * do filtering of the currents. otherwise we have ringing and 
-.param fc=1e3
+.param fc=10e3
 .param rf=1e3
 .param cf={1/(2*3.14*fc*rf)}
 
