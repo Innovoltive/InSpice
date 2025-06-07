@@ -64,7 +64,6 @@ tran 0.1m 1s 0s uic
 *options chgtol=1e-6
 *options method=gear
 *options reltol=1e-3
-*plot qs_ref ds_ref
 plot v(as) v(bs) v(cs)
 plot i(vas) i(vbs) i(vcs)
 *plot v(as) i(vas)
