@@ -30,9 +30,24 @@ Ecs cs2 n value={lambda_m*v(we)*cos(v(theta) - 4*3.14/3)}
 * add a capacitor to ground to avoid floating nodes
 can n 0 1e-9
 
-Eias ias 0 value={i(vas)}
-Eibs ibs 0 value={i(vbs)}
-Eics ics 0 value={i(vcs)}
+
+* do filtering of the currents. otherwise we have ringing and 
+.param fc=1e3
+.param rf=1e3
+.param cf={1/(2*3.14*fc*rf)}
+
+Eias ias1 0 value={i(vas)}
+ras1 ias1 ias {rf}
+cas1 ias 0 {cf}
+
+Eibs ibs1 0 value={i(vbs)}
+rbs1 ibs1 ibs {rf}
+cbs1 ibs 0 {cf}
+
+Eics ics1 0 value={i(vcs)}
+rcs1 ics1 ics {rf}
+ccs1 ics 0 {cf}
+
 Xiab ias ibs ics ialpha ibeta clark
 Xpark ialpha ibeta theta iqs ids park
 

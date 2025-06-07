@@ -20,10 +20,10 @@
 vbus vbus1 0 DC {vbus}
 rbus vbus1 vbus 0.1
 
-Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
+*Xsvm qs_ref ds_ref theta as bs cs vbus spvm_avg
 ** To enable pwm spvm uncomment the lines below and comment the line above
-*Xspvmpwm qs_ref ds_ref theta daH daL dbH dbL dcH dcL spvmpwm fsw=1k dt=100n
-*Xinverter vbus 0 daH daL dbH dbL dcH dcL as bs cs inverter
+Xspvmpwm qs_ref ds_ref theta daH daL dbH dbL dcH dcL spvmpwm fsw=1k dt=100n
+Xinverter vbus 0 daH daL dbH dbL dcH dcL as bs cs inverter
 
 ** put a voltage in series with the motor to measure the current
 Vas as asm DC 0V
@@ -43,11 +43,11 @@ Eias iasm 0 value={i(vas)}
 Eibs ibsm 0 value={i(vbs)}
 Eics icsm 0 value={i(vcs)}
 
-Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
+*Xfoc iasm ibsm icsm rpm theta vbus qs_ref ds_ref controller rpm_ref=500
 
 **for testing uncomment the lines below
-*vqs_ref qs_ref 0 DC 0V PWL(0s 0V 0.1s {1/sqrt(3)}) 
-*vds_ref ds_ref 0 0
+vqs_ref qs_ref 0 DC 0V PWL(0s 0V 0.1s {1/sqrt(3)}) 
+vds_ref ds_ref 0 0
 *Vtheta theta 0 DC 0V PWL(0s 0V {1/5} {2*3.14} {1/5} 0V r=0s)
 * apply inductive load 
 *Lasm asm n 12.1e-3
