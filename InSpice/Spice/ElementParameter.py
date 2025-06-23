@@ -222,6 +222,45 @@ class ModelPositionalParameter(PositionalElementParameter):
 
 ####################################################################################################
 
+class KeywordPositionalElementParameter(PositionalElementParameter):
+    """
+    This class implements a positional element parameter with a keyword.
+
+    Public Attributes:
+
+        :attr:`keyword`
+            The keyword associated with the parameter, which is prepended to the parameter's value
+    """
+
+    def __init__(self, keyword, position, **kwargs):
+        super().__init__(position)
+        self._keyword = keyword
+    
+    def to_str(self, instance):
+        return f"{self._keyword} {super().to_str(instance)}"
+
+####################################################################################################
+
+class FloatKeywordPositionalParameter(KeywordPositionalElementParameter):
+
+    """This class implements a float positional parameter with a keyword."""
+
+    ##############################################
+
+    def __init__(self, keyword, position, unit=None, **kwargs):
+        super().__init__(keyword, position, **kwargs)
+        self._unit = unit
+
+    ##############################################
+
+    def validate(self, value):
+        if isinstance(value, Unit):
+            return value
+        else:
+            return Unit(value)
+
+####################################################################################################
+
 class FlagParameter(ParameterDescriptor):
 
     """This class implements a flag parameter.
@@ -267,9 +306,10 @@ class KeyValueParameter(ParameterDescriptor):
 
     ##############################################
 
-    def __init__(self, spice_name, default=None):
+    def __init__(self, spice_name, default=None, separator='='):
         super().__init__(default)
         self.spice_name = spice_name
+        self.separator = separator
 
     ##############################################
 
@@ -281,7 +321,7 @@ class KeyValueParameter(ParameterDescriptor):
     def to_str(self, instance):
         if bool(self):
             _ = self.str_value(instance)
-            return f'{self.spice_name}={_}'
+            return f'{self.spice_name}{self.separator}{_}'
         else:
             return ''
 
