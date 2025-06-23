@@ -128,6 +128,7 @@ from .ElementParameter import (
     InitialStatePositionalParameter,
     IntKeyParameter,
     ModelPositionalParameter,
+    FloatKeywordPositionalParameter
 )
 from . import Library
 from .StringTools import join_list, join_dict
@@ -805,8 +806,9 @@ class VoltageSource(DipoleElement):
     ALIAS = 'V'
     PREFIX = 'V'
 
-    dc_value = ExpressionPositionalParameter(position=0, key_parameter=False)
-    ac_value = FloatKeyParameter("ac", separator=" ", unit=U_V)
+    dc_value = FloatKeywordPositionalParameter("DC", position=0, unit=U_V)
+    ac_value = FloatKeywordPositionalParameter("AC", position=1, unit=U_V)
+    tran_value = ExpressionPositionalParameter(position=2)
 
 ####################################################################################################
 
@@ -832,8 +834,9 @@ class CurrentSource(DipoleElement):
     ALIAS = 'I'
     PREFIX = 'I'
 
-    dc_value = ExpressionPositionalParameter(position=0, key_parameter=False)
-    ac_value = FloatKeyParameter("ac", separator=" ", unit=U_A)
+    dc_value = FloatKeywordPositionalParameter("DC", position=0, unit=U_A)
+    ac_value = FloatKeywordPositionalParameter("AC", position=1, unit=U_A)
+    tran_value = ExpressionPositionalParameter(position=2)
 
 ####################################################################################################
 
