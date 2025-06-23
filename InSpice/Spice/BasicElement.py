@@ -798,14 +798,15 @@ class VoltageSource(DipoleElement):
     Attributes:
 
       :attr:`dc_value`
+      :attr:`ac_value`
 
     """
 
     ALIAS = 'V'
     PREFIX = 'V'
 
-    # Fixme: ngspice manual doesn't describe well the syntax
-    dc_value = FloatPositionalParameter(position=0, key_parameter=False, unit=U_V)
+    dc_value = ExpressionPositionalParameter(position=0, key_parameter=False)
+    ac_value = FloatKeyParameter("ac", separator=" ", unit=U_V)
 
 ####################################################################################################
 
@@ -824,14 +825,15 @@ class CurrentSource(DipoleElement):
     Attributes:
 
       :attr:`dc_value`
+      :attr:`ac_value`
 
     """
 
     ALIAS = 'I'
     PREFIX = 'I'
 
-    # Fixme: ngspice manual doesn't describe well the syntax
-    dc_value = FloatPositionalParameter(position=0, key_parameter=False, unit=U_A)
+    dc_value = ExpressionPositionalParameter(position=0, key_parameter=False)
+    ac_value = FloatKeyParameter("ac", separator=" ", unit=U_A)
 
 ####################################################################################################
 

@@ -267,9 +267,10 @@ class KeyValueParameter(ParameterDescriptor):
 
     ##############################################
 
-    def __init__(self, spice_name, default=None):
+    def __init__(self, spice_name, default=None, separator='='):
         super().__init__(default)
         self.spice_name = spice_name
+        self.separator = separator
 
     ##############################################
 
@@ -281,7 +282,7 @@ class KeyValueParameter(ParameterDescriptor):
     def to_str(self, instance):
         if bool(self):
             _ = self.str_value(instance)
-            return f'{self.spice_name}={_}'
+            return f'{self.spice_name}{self.separator}{_}'
         else:
             return ''
 
