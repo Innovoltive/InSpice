@@ -199,6 +199,7 @@ class RawFile(RawFileAbc):
             self._logger.warn(warning)
         self.title = self._read_header_field_line(header_line_iterator, 'Title')
         self.date = self._read_header_field_line(header_line_iterator, 'Date')
+        self._read_header_field_line(header_line_iterator, 'Command')
         self.plot_name = self._read_header_field_line(header_line_iterator, 'Plotname')
         self.flags = self._read_header_field_line(header_line_iterator, 'Flags')
         self.number_of_variables = int(self._read_header_field_line(header_line_iterator, 'No. Variables'))
