@@ -166,6 +166,7 @@ class VariableAbc:
 
 class RawFileAbc:
 
+    IGNORE=[b'Note: No compatibility mode selected!', b'Using SPARSE 1.3 as Direct Linear Solver']
     """ This class parse the stdout of ngspice and the raw data output.
     """
 
@@ -207,9 +208,10 @@ class RawFileAbc:
 
         # Fixme: self._header_line_iterator, etc.
 
-        line = None
-        while not line:
+        line = None        
+        while not line or line in self.IGNORE:
             line = next(header_line_iterator)
+        self._line_debug=line
         return line.decode('utf-8')
 
     ##############################################
@@ -217,8 +219,9 @@ class RawFileAbc:
     def _read_header_line(self, header_line_iterator, head_line):
 
         """ Read an header line and check it starts with *head_line*. """
-
+        
         line = self._read_line(header_line_iterator)
+        
         self._logger.debug(line)
         if line.startswith(head_line):
             return line
