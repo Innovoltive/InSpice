@@ -177,7 +177,7 @@ class WaveForm(UnitValues):
 
     def __repr__(self):
         _ = super().__str__()
-        return '{self.__class__.__name__} {self._name} {_}'
+        return f'{self.__class__.__name__} {self._name} {_}'
 
     ##############################################
 
