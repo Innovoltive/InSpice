@@ -50,7 +50,7 @@ For detailed documentation, please refer to the examples and docstrings.
 
 ## License
 
-InSpice is licensed under the GNU General Public License v3.0 (GPL-3.0), the same license as the original InSpice project.
+InSpice is licensed under the GNU General Public License v3.0 (GPL-3.0), the same license as the original PySpice project.
 
 ### GNU GPL v3.0
 
