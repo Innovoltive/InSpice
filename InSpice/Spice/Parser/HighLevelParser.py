@@ -1123,7 +1123,7 @@ class SpiceSource:
 
     def analyse(self) -> None:
         state_stack = [SpiceStates.DESK]
-        circuit = []
+        circuit = Netlist()
         subcircuit = None
         control = []
 
