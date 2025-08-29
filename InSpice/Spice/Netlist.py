@@ -614,7 +614,7 @@ class Circuit(Netlist):
         for include in self._includes:
             circuit.include(include)
         for name, value in self._parameters.items():
-            self.parameter(name, value)
+            circuit.parameter(name, value)
 
         return circuit
 
