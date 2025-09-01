@@ -189,7 +189,7 @@ class Builder(Translator):
     ##############################################
 
     def handle_Library(self, obj: Library) -> None:
-        raise NotImplementedError
+        self._circuit.lib(obj.path, obj.libname)
 
     ##############################################
 
