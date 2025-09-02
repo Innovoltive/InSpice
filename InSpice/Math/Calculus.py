@@ -117,7 +117,7 @@ def simple_derivative(x, values):
 
 def derivative(x, values, derivative_order=1, accuracy_order=4):
 
-    """Compute the derivative at the given derivative order and accuracy order. The precision of the
+    r"""Compute the derivative at the given derivative order and accuracy order. The precision of the
     Taylor expansion is :math:`\mathcal{O}(dx^{accuracy})`.
     """
 

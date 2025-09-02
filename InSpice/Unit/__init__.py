@@ -236,5 +236,5 @@ for unit in _Unit.UnitMetaclass.unit_iter():
 
 unit_value = _Unit.UnitValue.simple_value
 
-Frequency = u_Hz
-Period = u_s
+Frequency = u_Hz  # noqa: F821
+Period = u_s  # noqa: F821
