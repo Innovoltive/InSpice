@@ -1181,8 +1181,6 @@ class SpiceSource:
                         raise ParseError(".ends without .subckt")
                     state_stack.pop()
                     subcircuit = None
-                case Library():
-                    self._includes.append(obj)
                 case Model():
                     self._models.append(obj)
                     append(obj)
