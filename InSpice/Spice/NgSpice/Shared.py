@@ -1152,7 +1152,7 @@ class NgSpiceShared:
         """
         command = 'stop'
         if 'after' in kwargs:
-            command += f' after {kwargs['after']}'
+            command += f' after {kwargs["after"]}'
         for condition in args:
             command += f' when {condition}'
         self.exec_command(command)
