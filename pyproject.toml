@@ -36,7 +36,7 @@ dependencies = [
 "Bug Tracker" = "https://github.com/Innovoltive/InSpice/issues"
 
 [project.optional-dependencies]
-dev = ["pytest", "twine", "build", "flake8", "scipy", "pint", "KiCadRW"]
+dev = ["pytest", "twine", "build", "flake8", "scipy", "pint", "KiCadRW", "sexpdata"]
 
 [project.scripts]
 inspice-post-installation = "InSpice.Scripts.InSpice_post_installation:main"
