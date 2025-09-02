@@ -7,8 +7,8 @@ from InSpice.KiCad import PythonDumper
 
 ####################################################################################################
 
-schema_path = Path(
-    'examples', 'power-supplies', 'kicad', 'capacitive-half-wave-rectification-pre-zener',
+schema_path = Path(__file__).parent.parent / Path(
+    'power-supplies', 'kicad', 'capacitive-half-wave-rectification-pre-zener',
     'capacitive-half-wave-rectification-pre-zener.kicad_sch'
 )
 
