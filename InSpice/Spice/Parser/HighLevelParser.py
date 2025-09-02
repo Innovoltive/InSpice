@@ -1159,7 +1159,7 @@ class SpiceSource:
                     append(obj)
                     raise NotImplementedError
                 case Include():
-                    self._includes.append(obj.path)
+                    self._includes.append(obj)
                 case Library():
                     self._libs.append(obj)
                 case Control():
