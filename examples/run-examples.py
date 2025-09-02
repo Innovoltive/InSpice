@@ -105,3 +105,9 @@ if failed_examples:
 else:
     print("\nAll examples executed successfully!")
 print("="*80)
+
+# Exit with appropriate code for CI
+if failed_examples:
+    sys.exit(1)  # Failure - CI will detect this
+else:
+    sys.exit(0)  # Success
